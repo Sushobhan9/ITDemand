@@ -1,0 +1,67 @@
+﻿@model DemandRequestViewModel
+
+@functions {
+    public static string FormatByteDisplay(int bytes)
+    {
+        if (bytes == 0) return "0 Byte";
+        var k = 1000; // or 1024 for binary
+        var sizes = new string[] { "Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+        var i = Math.Floor(Math.Log(bytes) / Math.Log(k));
+        return (bytes / Math.Pow(k, i)).ToString("0.00") + " " + sizes[(int)i];
+    }
+}
+
+<div class="row mt-3">
+    <div class="col-md-12">
+        <table id="attachmentTable" class="table">
+            <thead>
+                <tr>
+                    <th>Filename</th>
+                    <th class="text-center">Created</th>
+                    <th class="text-center">Created By</th>
+                    <th class="text-center">Size</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Attachments.Any())
+                {
+                    var rowIdx = 0;
+                    foreach (var file in Model.Attachments)
+                    {
+                        <tr>
+                            <td>
+                                <input type="hidden" name="Attachments[@rowIdx].Id" value="@file.Id">
+                                <a href="@Url.Action("DownloadFile", "Project", new {id = @file.Id})" style='display: inline-block; margin-top: 6px;'>@file.FileName</a>
+                            </td>
+                            <td class="text-center">
+                                <span style='display: inline-block; margin-top: 6px;'>@file.Created.ToString("f")</span>
+                            </td>
+                            <td class="text-center">
+                                <span style='display: inline-block; margin-top: 6px;'>@(file.CreatedBy?.DisplayName ?? string.Empty)</span>
+                            </td>
+                            <td class="text-center">
+                                <span style='display: inline-block; margin-top: 6px;'>@FormatByteDisplay((int)file.Size)</span>
+                            </td>
+                            <td class='text-right'>
+                                <a href='#' class='btn pointer deleteRow'><i class='fa fa-times'></i></a>
+                            </td>
+                        </tr>
+                        rowIdx++;
+                    }
+                }
+            </tbody>
+        </table>
+        <p class="text-muted mt-1" id="noAttachmentsMsg">No Files have been attached.</p>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="d-flex">
+            <button type="button" class="btn btn-secondary ms-auto" id="btnAddAttachment">
+                <i class="fa fa-paperclip"></i> Attach
+            </button>
+        </div>
+    </div>
+</div>

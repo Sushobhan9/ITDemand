@@ -1,0 +1,580 @@
+﻿@model DemandRequestViewModel
+
+@functions {
+    public static string FormatDateMMM(DateTimeOffset? date)
+    {
+        const string format = "MMM dd yyyy";
+        return date.HasValue ? date.Value.ToString(format) : string.Empty;
+    }
+
+    public static string FormatDateYYYYMM(DateTimeOffset? date)
+    {
+        const string format = "yyyy MMM";
+        return date.HasValue ? date.Value.ToString(format) : string.Empty;
+    }
+}
+
+<p><span style="color: #f00;">* Required</span></p>
+
+<div class="card mb-3">
+  <div class="card-header">Summary</div>
+  <div class="card-body">
+    <div class="mb-3">
+        <label class="form-label">
+            <span class="required-asterisk">Demand Name</span>
+            <i class="fas fa-question-circle cursor-pointer" style="display: inline-block; margin-left: 0.75em;"
+			    data-bs-container="body"
+                data-bs-toggle="info-popover"
+				data-bs-placement="right"
+                data-bs-custom-class="info-popover"
+				data-bs-content="Enter the name of the project/change. Choose a name which explains the objective in a few words. This name will appear in demand reporting.">
+			</i>
+        </label>
+        <input type="text" id="Name" name="Name" class="form-control" value="@Model.Name" maxlength="100" onKeyUp="count_chars_demandName()"/>
+        <div id="demandNameCharWarning" class="text-muted">Text entry is limited to 100 characters. Character count: <span id="demandNameCharsCount"></span></div>
+    </div>
+    <div>
+        <label class="form-label">
+            <span class="required-asterisk">Requirements / Opportunities</span>
+            <i class="fas fa-question-circle cursor-pointer" style="display: inline-block; margin-left: 0.75em;"
+			    data-bs-container="body"
+                data-bs-toggle="info-popover"
+				data-bs-placement="right"
+                data-bs-html="true"
+                data-bs-custom-class="info-popover"
+				data-bs-content="<p>Clearly describe why this demand request has been raised by justifying the business need as follows:</p><ul><li>What is the problem which needs to be solved?</li><li>What is the opportunity?</li><li>What is (in brief) the current situation and the required future state?</li></ul>">
+			</i>
+        </label>
+        <textarea name="ProblemStatement" class="form-control" rows="5">@Model.ProblemStatement</textarea>
+        @if (Model.CreatedDate > DateTimeOffset.MinValue)
+        {
+                <div class="mt-2">
+                <span><strong>Date Created:</strong> @Model.CreatedDate.ToString("F")</span>
+            </div>
+        }
+        @if (Model.SubmittedForReviewDate > DateTimeOffset.MinValue)
+        {
+            <div>
+                <span><strong>Submitted for PMO Review:</strong> @Model.SubmittedForReviewDate.Value.ToString("F")</span>
+            </div>
+        }
+    </div>
+  </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">Categorization</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <label class="form-label">
+                    <span class="required-asterisk">Funding Business Unit</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+			            data-bs-container="body"
+                        data-bs-toggle="info-popover"
+				        data-bs-placement="right"
+                        data-bs-custom-class="info-popover"
+				        data-bs-content="Select the Business Unit that will be paying for the project.  This will be used by IT Controlling for recharging. For complex recharging this will be handled manually by IT Controlling.">
+			        </i>
+                </label>
+                <select asp-for="BusinessUnitId" asp-items="Model.BusinessUnits" class="form-select">
+                    <option selected></option>
+                </select>
+          </div>
+          <div class="col">
+              <label class="form-label">
+                    <span class="required-asterisk">Affected Business Units</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+			            data-bs-container="body"
+                        data-bs-toggle="info-popover"
+				        data-bs-placement="right"
+                        data-bs-custom-class="info-popover"
+				        data-bs-content="Select the Business Units that will be affected by the future project/change (multiple selections are possible).">
+			        </i>
+                </label>
+                <select asp-for="AffectedBusinessUnits" asp-items="Model.BusinessUnits" class="form-select"></select>
+          </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <label class="form-label">
+                    <span class="required-asterisk">Process Area</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+		                data-bs-container="body"
+                        data-bs-toggle="info-popover"
+		                data-bs-placement="right"
+                        data-bs-custom-class="info-popover"
+		                data-bs-content="If a Corporate IT supported Application is selected then this is a required field. The combination of the specific corporate IT Application and the Process Area is used to notify subject matter experts of the demand request so they can provide their input to the review of the demand request.">
+	                </i>
+                </label>
+                <select asp-for="ProcessAreaId" asp-items="Model.ProcessAreas" class="form-select">
+                    <option selected></option>
+                </select>
+            </div>
+            <div class="col">
+                <label class="form-label">
+                    <span class="required-asterisk">Number of Users Impacted</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+                        data-bs-container="body"
+                        data-bs-toggle="info-popover"
+                        data-bs-placement="right"
+                        data-bs-custom-class="info-popover"
+                        data-bs-content="Indicate the estimated number of internal users who will be impacted by the implementation of this request. Used by PMOs to assess potential risk.">
+                    </i>
+                </label>
+                <select asp-for="UsersImpactedId" asp-items="Model.UsersImpacted" class="form-select">
+                    <option selected></option>
+                </select>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <label class="form-label">
+                    <span class="required-asterisk">Business Driver</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+                        data-bs-container="body"
+                        data-bs-toggle="info-popover"
+                        data-bs-placement="right"
+                        data-bs-html="true"
+                        data-bs-custom-class="info-popover"
+                        data-bs-content="<dl>
+                        <dt>Cost Avoidance / Risk Mitigation/ Run the Business</dt>
+                        <dd>Investment required to maintain existing business operations</dd>
+                        <dt>Cost Savings / Cost Reduction</dt>
+                        <dd>Enables productivity benefits</dd>
+                        <dt>Growth (Price / Volume) / Increase Capability)</dt>
+                        <dd>Enables revenue increase, may be through replication of existing capability</dd>
+                        <dt>TLS</dt>
+                        <dd>Tax, Legal, Statutory or other external compliance requirement</dd>
+                        <dt>Strategic Investment </dt>
+                        <dd>Investment in new capability/potential new value stream</dd>
+                        <dt>Not Applicable </dt>
+                        <dd>None of the above, could be small baseline/maintenance requests</dd>
+                        </dl>"
+                    >
+                    </i>
+                </label>
+                <select asp-for="BusinessDriverId" asp-items="Model.BusinessDrivers" class="form-select">
+                    <option selected></option>
+                </select>
+            </div>
+            <div class="col">
+                <label class="form-label">
+                    <span>Benefits per year (OP kUSD)</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+                        data-bs-container="body"
+                        data-bs-toggle="info-popover"
+                        data-bs-placement="top"
+                        data-bs-html="true"
+                        data-bs-custom-class="info-popover"
+                        data-bs-content="<p>Net productivity during a full 12-month period (at full rate of return). This is when the full rate of return is achieved measured for a 12-month period, not the initial values during any ramp up period.</p><p>Entered as thousand USD.</p><p>If you have an estimated range of the Benefits per year to be expected, then enter the mid-point in the range you have.</p>">
+                    </i>
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="text" name="BenefitsPerYear" id="BenefitsPerYear" class="form-control" value="@Model.BenefitsPerYear">
+                </div>
+            </div>
+            <div class="col">
+                <label class="form-label">
+                    <span>Benefit Duration</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+                        data-bs-container="body"
+                        data-bs-toggle="info-popover"
+                        data-bs-placement="top"
+                        data-bs-custom-class="info-popover"
+                        data-bs-content="Is the Benefit a one-time benefit or is it going to be a recurring benefit?">
+                    </i>
+                </label>
+                <select asp-for="BenefitDuration" asp-items="Model.BenefitDurations" class="form-select">
+                    <option selected></option>
+                </select>
+            </div>
+            <div class="col">
+                <label class="form-label">
+                    <span>Benefit Start</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+                        data-bs-container="body"
+                        data-bs-toggle="info-popover"
+                        data-bs-placement="top"
+                        data-bs-custom-class="info-popover"
+                        data-bs-content="When will the benefit start to be realised to the Business? (will display as YYYY MM)">
+                    </i>
+                </label>
+                <div class="input-group">
+                    <input type="text" name="BenefitStart" class="form-control datepicker" value="@FormatDateYYYYMM(Model.BenefitStart)">
+                    <span class="input-group-text cursor-pointer"><i class="fa fa-calendar"></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <label class="form-label">
+                    <span class="required-asterisk">Business Benefit Description</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+			            data-bs-container="body"
+                        data-bs-toggle="info-popover"
+				        data-bs-placement="right"
+                        data-bs-html="true"
+                        data-bs-custom-class="info-popover"
+				        data-bs-content="<p>List the expected financial/non-financial benefits that will be delivered by the project. Non-financial benefits may include:</p><ul><li>Tax, legal or statutory/regulatory compliance</li><li>Customer experience</li><li>Application convergence</li><li>Business continuity</li><li>Improved safety</li></ul>">
+			        </i>
+                </label>
+                <textarea name="BusinessBenefit" class="form-control" rows="5">@Model.BusinessBenefit</textarea>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <label class="form-label">
+                    <span class="required-asterisk">Consequence of not Implementing Demand?</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+			            data-bs-container="body"
+                        data-bs-toggle="info-popover"
+				        data-bs-placement="right"
+                        data-bs-html="true"
+                        data-bs-custom-class="info-popover"
+				        data-bs-content="<p>Describe the consequence of doing nothing.</p><p>For example:</p><ul><li>Business will remain unable to meet growing customer requirements.</li><li>Business will not be compliant with local legislation and will incur a fine.</li></ul>">
+			        </i>
+                </label>
+                <textarea name="ConsequenceNotImplemented" class="form-control" rows="5">@Model.ConsequenceNotImplemented</textarea>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <label class="form-label">
+                    <span class="required-asterisk">High Level Scope Summary</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+			            data-bs-container="body"
+                        data-bs-toggle="info-popover"
+				        data-bs-placement="right"
+                        data-bs-html="true"
+                        data-bs-custom-class="info-popover"
+				        data-bs-content="<p>What is included and excluded in the scope of this project/change?</p><p>For example:</p><ul><li>Regions/countries</li><li>Businesses</li><li>Processes</li><li>Integration</li></ul>">
+			        </i>
+                </label>
+                <textarea name="ScopeSummary" class="form-control" rows="5">@Model.ScopeSummary</textarea>
+                <div class="text-muted">Highlights the scope of the demand request, but at a very high level.</div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <label class="form-label">Additional Comments</label>
+                <textarea name="Comments" class="form-control" rows="5">@Model.Comments</textarea>
+                <div class="text-muted">Any other information relevant to the request that doesn't fall within the above categories.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">Involved Persons</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <label class="form-label">
+                    <span class="required-asterisk">Request Owner</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+			            data-bs-container="body"
+                        data-bs-toggle="info-popover"
+				        data-bs-placement="right"
+                        data-bs-html="true"
+                        data-bs-custom-class="info-popover"
+				        data-bs-content="<p>The Demand Request Owner is responsible for entering relevant information into GPS and is the single point of contact regarding any questions related to the demand and for progressing any actions required to drive the demand request through the process.</p><p>This field automatically populates with the name of the individual who created the idea, however this can be changed as required.</p>">
+			        </i>
+                </label>
+                <div class="input-group">
+                    <input type="hidden" name="RequestOwner.Id" class="form-control" value="@(Model.RequestOwner?.Id ?? 0)">
+                    <input type="hidden" name="RequestOwner.UserName" class="form-control" value="@(Model.RequestOwner?.UserName ?? string.Empty)">
+                    <input type="hidden" name="RequestOwner.Email" class="form-control" value="@(Model.RequestOwner?.Email ?? string.Empty)">
+                    <input type="text" name="RequestOwner.DisplayName" class="form-control" value="@(Model.RequestOwner?.DisplayName ?? string.Empty)" readonly>
+                    <div class="input-group-overlay cursor-pointer"><i class="fa fa-times"></i></div>
+                    <span class="input-group-text cursor-pointer"><i class="fa fa-user"></i></span>
+                </div>
+                <div class="text-muted">The Request Owner MUST be within IT unless an exception has been agreed to.</div>
+            </div>
+            <div class="col">
+                <label class="form-label">
+                    <span class="required-asterisk">Sponsor</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+                        data-bs-container="body"
+                        data-bs-toggle="info-popover"
+                        data-bs-placement="top"
+                        data-bs-custom-class="info-popover"
+                        data-bs-content="The Project Sponsor will be a senior business representative who wants the change, to see the benefits and is overall accountable for the project/change.">
+                    </i>
+                </label>
+                <div class="input-group">
+                    <input type="hidden" name="RequestSponsor.Id" class="form-control" value="@(Model.RequestSponsor?.Id ?? 0)">
+                    <input type="hidden" name="RequestSponsor.UserName" class="form-control" value="@(Model.RequestSponsor?.UserName ?? string.Empty)">
+                    <input type="hidden" name="RequestSponsor.Email" class="form-control" value="@(Model.RequestSponsor?.Email ?? string.Empty)">
+                    <input type="text" name="RequestSponsor.DisplayName" class="form-control" value="@(Model.RequestSponsor?.DisplayName ?? string.Empty)" readonly>
+                    <div class="input-group-overlay cursor-pointer"><i class="fa fa-times"></i></div>
+                    <span class="input-group-text cursor-pointer"><i class="fa fa-user"></i></span>
+                </div>
+                <div class="text-muted">Assign the person who sponsored this request.</div>
+            </div>
+            <div class="col">
+                <label class="form-label">
+                    <span class="required-asterisk">Project Manager</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+                        data-bs-container="body"
+                        data-bs-toggle="info-popover"
+                        data-bs-placement="top"
+                        data-bs-custom-class="info-popover"
+                        data-bs-content="When will the benefit start to be realised to the Business? (will display as YYYY MM)">
+                    </i>
+                </label>
+                <div class="input-group">
+                    <input type="hidden" name="ProjectManager.Id" class="form-control" value="@(Model.ProjectManager?.Id ?? 0)">
+                    <input type="hidden" name="ProjectManager.UserName" class="form-control" value="@(Model.ProjectManager?.UserName ?? string.Empty)">
+                    <input type="hidden" name="ProjectManager.Email" class="form-control" value="@(Model.ProjectManager?.Email ?? string.Empty)">
+                    <input type="text" name="ProjectManager.DisplayName" class="form-control" value="@(Model.ProjectManager?.DisplayName ?? string.Empty)" readonly>
+                    <div class="input-group-overlay cursor-pointer"><i class="fa fa-times"></i></div>
+                    <span class="input-group-text cursor-pointer"><i class="fa fa-user"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">Estimate Project</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <label class="form-label">
+                    <span class="required-asterisk">Estimated Internal IT Effort (In Days)</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+                        data-bs-container="body"
+                        data-bs-toggle="info-popover"
+                        data-bs-placement="top"
+                        data-bs-custom-class="info-popover"
+                        data-bs-content="Enter the estimated amount of internal resource effort required to implement the solution. This includes Corporate IT AND Regional IT resources. Used by PMOs to assess potential risk.">
+                    </i>
+                </label>
+                <input type="text" name="EstimatedInternalEffort" class="form-control" value="@Model.EstimatedInternalEffort" />
+            </div>
+            <div class="col">
+                <label class="form-label">
+                    <span class="required-asterisk">Estimated Total IT Cost (USD)</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+                        data-bs-container="body"
+                        data-bs-toggle="info-popover"
+                        data-bs-placement="top"
+                        data-bs-custom-class="info-popover"
+                        data-bs-content="Please select a value from the drop-down menu considering only IT related costs. This is an indicative number used by PMOs to assess potential risk.">
+                    </i>
+                </label>
+                <select asp-for="EstimatedTotalCost" asp-items="Model.EstimatedTotalCosts" class="form-select">
+                    <option selected></option>
+                </select>
+            </div>
+            <div class="col">
+                <label class="form-label">
+                    <span>Estimated Start Date</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+                        data-bs-container="body"
+                        data-bs-toggle="info-popover"
+                        data-bs-placement="top"
+                        data-bs-custom-class="info-popover"
+                        data-bs-content="Enter the planned start date of the project / change (following approval). Used by the regions to report on demand pipelines.">
+                    </i>
+                </label>
+                <div class="input-group">
+                    <input type="text" name="StartDate" class="form-control datepicker" value="@FormatDateMMM(Model.StartDate)">
+                    <span class="input-group-text cursor-pointer"><i class="fa fa-calendar"></i></span>
+                </div>
+            </div>
+            <div class="col">
+                <label class="form-label">
+                    <span>Estimated End Date</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+                        data-bs-container="body"
+                        data-bs-toggle="info-popover"
+                        data-bs-placement="top"
+                        data-bs-custom-class="info-popover"
+                        data-bs-content="Enter the planned end date of the project / change (Implementation Completed). Used by the regions to report on demand pipelines and to assist the Demand Requester in planning around release cycles. PMO will use the end date to ensure the project/change is closed correctly.">
+                    </i>
+                </label>
+                <div class="input-group">
+                    <input type="text" name="EndDate" class="form-control datepicker" value="@FormatDateMMM(Model.EndDate)">
+                    <span class="input-group-text cursor-pointer"><i class="fa fa-calendar"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">Technology</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <label class="form-label required-asterisk">
+                    <span>Application</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+                        data-bs-container="body"
+                        data-bs-toggle="info-popover"
+                        data-bs-placement="top"
+                        data-bs-html="true"
+                        data-bs-custom-class="info-popover"
+                        data-bs-content="<p>Select the affected Corporate IT Supported application from the drop-down list</p><p>OR</p><p>Select 'Local' (and enter the name of the local application in the box that appears)</p><p>OR</p><p>Select 'Other Corporate IT Supported Application' (if not listed) or 'New Application' as appropriate.</p><p>Selecting a Corporate IT Supported application will require further information which is used to expedite the demand review.</p>">
+                    </i>
+                </label>
+                <select asp-for="ApplicationTypeId" asp-items="Model.ApplicationTypes" class="form-select">
+                    <option selected></option>
+                </select>
+            </div>
+            <div class="col">
+                <label class="form-label">
+                    <span>RED CAB</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+                        data-bs-container="body"
+                        data-bs-toggle="info-popover"
+                        data-bs-placement="top"
+                        data-bs-html="true"
+                        data-bs-custom-class="info-popover"
+                        data-bs-content="<p>For Corporate IT supported Applications any changes which are considered bespoke developments / customization, complex and will require significant effort to build, support and maintain are classed as RED changes.</p><p>Regional IT Directors formally review these changes in a Change Approval Board and if approved the change may progress.</p>">
+                    </i>
+                </label>
+                <select asp-for="IsRedCab" asp-items="Model.YesNoOptions" class="form-select"></select>
+            </div>
+        </div>
+        <div class="row mt-3" id="localApplicationRow">
+            <div class="col">
+                <label class="form-label">
+                    <span class="required-asterisk">Local Application Description</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+			            data-bs-container="body"
+                        data-bs-toggle="info-popover"
+				        data-bs-placement="right"
+                        data-bs-custom-class="info-popover"
+				        data-bs-content="Please manually enter the name of the affected local application.">
+			        </i>
+                </label>
+                <textarea name="ApplicationDescription" class="form-control" rows="5">@Model.ApplicationDescription</textarea>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <label class="form-label">
+                    <span>Targeted Technology and/or Potential Solution</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+			            data-bs-container="body"
+                        data-bs-toggle="info-popover"
+				        data-bs-placement="right"
+                        data-bs-html="true"
+                        data-bs-custom-class="info-popover"
+				        data-bs-content="<p>Provide the high level details of the potential solution if known.</p><p>For example:</p><ul><li>Existing solutions considered, add reasons for rejection (if any)</li><li>New SaaS application, has any integration to existing Linde plc. solutions been considered?</li><li>Re-use of existing solution</li><li>Internal development</li></ul>">
+			        </i>
+                </label>
+                <textarea name="TechnicalScope" class="form-control" rows="5">@Model.TechnicalScope</textarea>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <label class="form-label">
+                    <span class="required-asterisk">Will there be any Changes to Existing Interfaces or Creation of New Interfaces?</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+                        data-bs-container="body"
+                        data-bs-toggle="info-popover"
+                        data-bs-placement="top"
+                        data-bs-custom-class="info-popover"
+                        data-bs-content="Select either 'Yes' or 'No' from the drop down menu.  If you are unsure select Yes and add a note in the comments so the Demand Committee are aware of your concern. All requests which have an impact on interfaces will be reviewed by the Demand Committee.">
+                    </i>
+                </label>
+                <select asp-for="InterfaceChanges" asp-items="Model.YesNoUnknownOptions" class="form-select">
+                    <option selected></option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">Security</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <label class="form-label">
+                    <span class="required-asterisk">Risk Assessment Output</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+                        data-bs-container="body"
+                        data-bs-toggle="info-popover"
+                        data-bs-placement="right"
+                        data-bs-html="true"
+                        data-bs-custom-class="info-popover"
+                        data-bs-content="<p>All demand must adhere to <a href='https://lindegroup.sharepoint.com/sites/LGGBLIT_ACRG/SitePages/Project-Security-by-Design---v1.3.aspx' target='_blank'>Security by Design Process</a>.</p><p>The link above will take you to the Security by Design SharePoint page where you can download the most up to date Security by Design Risk Assessment Tool and view tutorial videos which will guide you.</p><p><strong>Important:</strong> It is no longer required to upload the Risk Assessment directly to GPS. Instead, please ensure to click the ‘Submit Risk Assessment’ button in the Risk Assessment. The 'Submit Risk Assessment' button will automatically continue the workflow.</p><p>For all questions, please contact <a href='mailto:Tom.Jones@linde.com'>Tom Jones</a>.</p>">
+                    </i>
+                </label>
+                <select asp-for="SecurityAssessment" asp-items="Model.SecurityAssessmentOptions" class="form-select">
+                    <option selected></option>
+                </select>
+                <div class="text-muted" style="color: red">
+                    A completed Risk Assessment (v1.3) is mandatory to progress a demand entry.  Unless a Risk Assessment is uploaded into SharePoint (not GPS) your demand request will not be progressed and returned to you.
+					Select the help for the latest template and tutorials.  Only v1.3 will be accepted.
+				</div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <label class="form-label">
+                    <span class="required-asterisk">Compliance Relevant</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+			            data-bs-container="body"
+                        data-bs-toggle="info-popover"
+				        data-bs-placement="top"
+                        data-bs-html="true"
+                        data-bs-custom-class="info-popover"
+				        data-bs-content="<p><strong>Medical</strong> shall be selected if demand impacts either:</p><ul><li>Existing validated system</li><li>SAP with validation relevant process that will be used for medical products</li><li>New system to be used for medical products where validation decision is identified or pending</li></ul><p>If you need further description about Medical relevance, <a href='https://lindegroup.sharepoint.com/sites/Healthcare%20IS%20Compliance/SitePages/GPS-MedicalValidation.aspx' target='_blank'>see this link</a>.</p>">
+			        </i>
+                </label>
+                <select asp-for="ComplianceRelevant" asp-items="Model.ComplianceItems" class="form-select"></select>
+            </div>
+            <div class="col-md-6" id="medicalReferenceCol">
+				<div class="form-group">
+					<label class="form-label">
+                        <span class="required-asterisk">Medical Validation Reference</span>
+                        <i class="fas fa-question-circle help-icon cursor-pointer"
+			                data-bs-container="body"
+                            data-bs-toggle="info-popover"
+				            data-bs-placement="top"
+                            data-bs-html="true"
+                            data-bs-custom-class="info-popover"
+				            data-bs-content="<p>If <strong>Medical</strong> is selected as Compliance Relevant, this text field shall be filled in with either:</p><ul><li>Reference to existing relevant Risk Assessment that needs to be reviewed.</li><li>Statement that Risk Assessments needs to be completed.</li></ul><p>If you need more information on what should be filled in, <a href='https://lindegroup.sharepoint.com/sites/Healthcare%20IS%20Compliance/SitePages/GPS-MedicalValidation.aspx' target='_blank'>see this link</a> for the contacts of each validated system or the description on how to perform the initial Risk Assessment.</p>">
+			            </i>
+                    </label>
+					<input type="text" name="MedicalValidationReference" id="MedicalValidationReference" class="form-control" value="@Model.MedicalValidationReference" />
+				</div>
+			</div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">Approval</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <label class="form-label">
+                    <span class="required-asterisk">IT Director</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+                       data-bs-container="body"
+                       data-bs-toggle="info-popover"
+                       data-bs-placement="right"
+                       data-bs-custom-class="info-popover"
+                       data-bs-content="System generated based on the Funding Business Unit.">
+                    </i>
+                </label>
+                <div class="input-group">
+                    <input type="hidden" name="ItHead.Id" class="form-control" value="@(Model.ItHead?.Id ?? 0)">
+                    <input type="hidden" id="ItHead.UserName" name="ItHead.UserName" class="form-control" value="@(Model.ItHead?.UserName ?? string.Empty)">
+                    <input type="hidden" id="ItHead.Email" name="ItHead.Email" class="form-control" value="@(Model.ItHead?.Email ?? string.Empty)">
+                    <input type="text" id="ItHead.DisplayName" name="ItHead.DisplayName" class="form-control" value="@(Model.ItHead?.DisplayName ?? string.Empty)" readonly>
+                    <div class="input-group-overlay cursor-pointer"><i class="fa fa-times"></i></div>
+                    <span class="input-group-text cursor-pointer"><i class="fa fa-user"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

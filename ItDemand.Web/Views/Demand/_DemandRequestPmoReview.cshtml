@@ -1,0 +1,121 @@
+﻿@model DemandRequestViewModel
+
+<h4 class="mt-3">Demand Categorization</h4>
+<p class="mt-2">This section is for use by Corporate IT PMO only.</p>
+
+<div class="card mb-3">
+    <div class="card-header">Request Corrections</div>
+    <div class="card-body">
+        <p>
+            To send this request back to the submitter for additional information and/or corrections, select 'Yes' in the drop-down below and then provide additional instructions
+            in the comment box.
+        </p>
+        <p>
+            Clicking the Save button will revert this Demand to the <strong>Initial Entry</strong> state and notify the submitter of the need for additional information before approval of this item.
+        </p>
+        <div class="row">
+            <div class="col-md-6">
+                <label class="form-label">Request Corrections</label>
+                <select asp-for="RequestCorrections" class="form-select pmo-only">
+                    <option value="true">Yes</option>
+					<option value="false">No</option>
+                </select>
+            </div>
+        </div>
+        <div class="row mt-2" id="requestCorrectionsCommentsRow">
+            <div class="col">
+                <label class="form-label">Request Corrections Comments</label>
+                <textarea name="RequestCorrectionsComments" class="form-control" rows="5">@Model.RequestCorrectionsComments</textarea>
+            </div>
+        </div>
+        <div class="alert alert-info mt-3 mb-0" id="requestedCorrectionsAlert" role="alert"></div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">Demand Categorization</div>
+    <div class="card-body">
+        <p>Selecting an option below and clicking the <strong>Save</strong> button will enable the Demand Execution Workflow Process for this Demand item.</p>
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Demand Execution Process</strong></p>
+                @foreach (var workflowType in Model.PmoReviewOptions)
+                {
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input pmo-only" value="@workflowType.Item1" name="ExecutionType" @((workflowType.Item1) == (Model.ExecutionType) ? "checked=\"checked\"" : "")>
+                        <label class="form-check-label">
+                            @workflowType.Item2
+                        </label>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col">
+                <label class="form-label">Comments</label>
+                <textarea name="RequestCorrectionsComments" class="form-control" rows="5">@Model.RequestCorrectionsComments</textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">New Application Categorization</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <label class="form-label required-asterisk">New Application</label>
+                <select asp-for="NewApplication" asp-items="Model.YesNoOptions" class="form-select gbc-only">
+                    <option selected></option>
+                </select>
+            </div>
+            <div class="col">
+                <label class="form-label">
+                    <span class="required-asterisk">Proposed Platform</span>
+                    <i class="fas fa-question-circle help-icon cursor-pointer"
+			            data-bs-container="body"
+                        data-bs-toggle="info-popover"
+				        data-bs-placement="right"
+                        data-bs-custom-class="info-popover"
+                        data-bs-html="true"
+				        data-bs-content="<dl><dt>Platform</dt><dd>A Linde governed software platform</dd><dt>Other - External service</dt><dd>Not a Linde governed solution</dd><dt>Other – Internal service</dt><dd>A Linde datacentre hosted solution</dd></dl>">
+			        </i>
+                </label>
+                <select asp-for="ProposedPlatformId" asp-items="Model.ItPlatforms" class="form-select">
+                    <option selected></option>
+                </select>
+            </div>
+            <div class="col">
+                <label class="form-label required-asterisk">Decommission Required</label>
+                <select asp-for="DecommissionRequired" asp-items="Model.YesNoOptions" class="form-select gbc-only">
+                    <option selected></option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">Corporate IT Categorization</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <label class="form-label">Assigned SME</label>
+                <div class="input-group">
+                    <input type="hidden" name="AssignedSme.Id" class="form-control" value="@(Model.AssignedSme?.Id ?? 0)">
+                    <input type="hidden" name="AssignedSme.UserName" class="form-control" value="@(Model.AssignedSme?.UserName ?? string.Empty)">
+                    <input type="hidden" name="AssignedSme.Email" class="form-control" value="@(Model.AssignedSme?.Email ?? string.Empty)">
+                    <input type="text" name="AssignedSme.DisplayName" class="form-control" value="@(Model.AssignedSme?.DisplayName ?? string.Empty)" readonly>
+                    <div class="input-group-overlay cursor-pointer"><i class="fa fa-times"></i></div>
+                    <span class="input-group-text cursor-pointer"><i class="fa fa-user"></i></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">IT Segment</label>
+                <select asp-for="ItSegmentId" asp-items="Model.ItSegments" class="form-select">
+                    <option selected></option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,205 @@
+﻿@model DemandRequestViewModel
+
+@functions {
+    public static string FormatDateMMM(DateTimeOffset? date)
+    {
+        const string format = "MMM dd yyyy";
+        return date.HasValue ? date.Value.ToString(format) : string.Empty;
+    }
+
+    public static string FormatDateYYYYMM(DateTimeOffset? date)
+    {
+        const string format = "yyyy MMM";
+        return date.HasValue ? date.Value.ToString(format) : string.Empty;
+    }
+}
+
+<div class="card mt-3 mb-3">
+    <div class="card-header">General</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <label class="form-label">Project Phase</label>
+                <select asp-for="ProjectPhase" asp-items="Model.ProjectPhases" class="form-select">
+                    <option selected></option>
+                </select>
+            </div>
+            <div class="col">
+                <label class="form-label">Overall Status</label>
+                <select asp-for="OverallStatus" asp-items="Model.GreenYellowRedOptions" class="form-select">
+                    <option selected></option>
+                </select>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <label class="form-label">Budget</label>
+                <select asp-for="Budget" asp-items="Model.GreenYellowRedOptions" class="form-select">
+                    <option selected></option>
+                </select>
+            </div>
+            <div class="col">
+                <label class="form-label">Time</label>
+                <select asp-for="Time" asp-items="Model.GreenYellowRedOptions" class="form-select">
+                    <option selected></option>
+                </select>
+            </div>
+            <div class="col">
+                <label class="form-label">Scope</label>
+                <select asp-for="Scope" asp-items="Model.GreenYellowRedOptions" class="form-select">
+                    <option selected></option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-3">
+    <div class="card-header">Project Costs</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <label class="form-label">Baseline CAPEX (kUSD)</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="text" name="BaselineCapex" class="form-control numbers-only" value="@Model.BaselineCapex">
+                </div>
+            </div>
+            <div class="col">
+                <label class="form-label">Baseline OPEX (kUSD)</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="text" name="BaselineOpex" class="form-control numbers-only" value="@Model.BaselineOpex">
+                </div>
+            </div>
+            <div class="col">
+                <label class="form-label">IT Running Cost (per year - kUSD)</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="text" name="CostItPerYear" class="form-control numbers-only" value="@Model.CostItPerYear">
+                </div>
+            </div>
+            <div class="col">
+                <label class="form-label">Payback or IRR or NPV</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="text" name="Payback" class="form-control numbers-only" value="@Model.Payback">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <label class="form-label">Actual CAPEX (kUSD)</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="text" name="ActualCapex" class="form-control numbers-only" value="@Model.ActualCapex">
+                </div>
+            </div>
+            <div class="col">
+               <label class="form-label">Actual OPEX (kUSD)</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="text" name="ActualOpex" class="form-control numbers-only" value="@Model.ActualOpex">
+                </div>
+            </div>
+            <div class="col">
+                <label class="form-label">Actual CAPEX in Current Year (kUSD)</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="text" name="ActualCapexCurrentYear" class="form-control numbers-only" value="@Model.ActualCapexCurrentYear">
+                </div>
+            </div>
+            <div class="col">
+                <label class="form-label">Actual OPEX in Current Year (kUSD)</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="text" name="ActualOpexCurrentYear" class="form-control numbers-only" value="@Model.ActualOpexCurrentYear">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <label class="form-label">EAC CAPEX (kUSD)</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="text" name="EacCapex" class="form-control numbers-only" value="@Model.EacCapex">
+                </div>
+            </div>
+            <div class="col">
+               <label class="form-label">EAC OPEX (kUSD)</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="text" name="EacOpex" class="form-control numbers-only" value="@Model.EacOpex">
+                </div>
+            </div>
+            <div class="col">
+                <label class="form-label">EAC CAPEX in Current Year (kUSD)</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="text" name="EacCapexCurrentYear" class="form-control numbers-only" value="@Model.EacCapexCurrentYear">
+                </div>
+            </div>
+            <div class="col">
+                <label class="form-label">EAC OPEX in Current Year (kUSD)</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="text" name="EacOpexCurrentYear" class="form-control numbers-only" value="@Model.EacOpexCurrentYear">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-3">
+    <div class="card-header">Project Status Details</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <label class="form-label">Key Messages</label>
+                <textarea name="KeyMessages" class="form-control" rows="5">@Model.KeyMessages</textarea>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <label class="form-label">Top Issue(s)</label>
+                <textarea name="TopIssues" class="form-control" rows="5">@Model.TopIssues</textarea>
+            </div>
+            <div class="col">
+                <label class="form-label">Top Risk(s)</label>
+                <textarea name="TopRisks" class="form-control" rows="5">@Model.TopRisks</textarea>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <label class="form-label">Accomplished in Last Period</label>
+                <textarea name="AccomplishedLastPeriod" class="form-control" rows="5">@Model.AccomplishedLastPeriod</textarea>
+            </div>
+            <div class="col">
+                <label class="form-label">Planned in Next Period</label>
+                <textarea name="PlannedNextPeriod" class="form-control" rows="5">@Model.PlannedNextPeriod</textarea>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <label class="form-label">Key Milestones</label>
+                <textarea name="KeyMilestones" class="form-control" rows="5">@Model.KeyMilestones</textarea>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <label class="form-label">Milestone Plan Date</label>
+                <div class="input-group">
+                    <input type="text" name="MilestonePlanDate" class="form-control datepicker" value="@FormatDateMMM(Model.MilestonePlanDate)">
+                    <span class="input-group-text cursor-pointer"><i class="fa fa-calendar"></i></span>
+                </div>
+            </div>
+            <div class="col">
+                <label class="form-label">Milestone Actual Date</label>
+               <div class="input-group">
+                    <input type="text" name="MilestoneActualDate" class="form-control datepicker" value="@FormatDateMMM(Model.MilestoneActualDate)">
+                    <span class="input-group-text cursor-pointer"><i class="fa fa-calendar"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

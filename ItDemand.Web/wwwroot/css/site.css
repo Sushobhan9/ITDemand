@@ -1,0 +1,80 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+/* Bootstrap Mods */
+.footer {
+   line-height: 40px !important;
+}
+
+.breadcrumb {
+   background-color: #f0f0f0;
+   border-radius: 4px;
+   padding: 8px 15px;
+}
+
+.alert-sm {
+   /*--bs-alert-padding-x: 0.5 rem;
+   --bs-alert-padding-y: 0.9 rem;*/
+   padding: 8px 8px;
+}
+
+.info-popover {
+   --bs-popover-max-width: 600px;
+}
+
+.bg-linde-blue {
+   background-color: #005591;
+}
+
+.required-asterisk:after {
+   content: " *";
+   color: #f00;
+}
+
+.cursor-pointer {
+   cursor: pointer
+}
+
+.cursor-help {
+   cursor: help
+}
+
+.help-icon {
+   display: inline-block;
+   margin-left: 0.75em;
+}
+
+.bg-tooltip-primary {
+   --bs-tooltip-bg: var(--bs-primary);
+}
+
+.input-group-overlay {
+   font-weight: normal;
+   line-height: 1;
+   color: #555;
+   width: 0%;
+   position: relative;
+   left: -20px;
+   top: 11px;
+   z-index: 100;
+}
+
+.input-group-sm .input-group-overlay {
+   top: 8px;
+}

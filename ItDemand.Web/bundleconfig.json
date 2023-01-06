@@ -1,0 +1,43 @@
+[
+	{
+		"outputFileName": "wwwroot/css/main.min.css",
+		"inputFiles": [
+			"wwwroot/lib/bootstrap/css/bootstrap.css",
+			"wwwroot/lib/bootstrap-multiselect/css/bootstrap-multiselect.css",
+			"wwwroot/css/site.css"
+		]
+	},
+	{
+		"outputFileName": "wwwroot/css/fontawesome-bundle.min.css",
+		"inputFiles": [
+			"wwwroot/lib/font-awesome/css/fontawesome.css",
+			"wwwroot/lib/font-Awesome/css/regular.css",
+			"wwwroot/lib/font-Awesome/css/solid.css"
+		]
+	},
+	{
+		"outputFileName": "wwwroot/js/main.min.js",
+		"inputFiles": [
+			"wwwroot/lib/jquery/dist/jquery.js",
+			"wwwroot/lib/bootstrap/js/bootstrap.js",
+			"wwwroot/lib/bootstrap-multiselect/js/bootstrap-multiselect.js",
+			"wwwroot/js/app.js",
+			"wwwroot/js/app.dialogs.usersearch.js",
+			"wwwroot/js/site.js"
+		],
+		"minify": {
+			"enabled": true,
+			"renameLocals": true
+		}
+	},
+	{
+		"outputFileName": "wwwroot/js/demand-dashboard.min.js",
+		"inputFiles": [
+			"wwwroot/js/dashboard-settings-cache.js"
+		],
+		"minify": {
+			"enabled": true,
+			"renameLocals": true
+		}
+	}
+]

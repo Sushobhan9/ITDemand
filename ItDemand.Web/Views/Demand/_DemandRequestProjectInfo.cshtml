@@ -1,0 +1,96 @@
+﻿@model DemandRequestViewModel
+
+<div class="card mt-3 mb-3">
+    <div class="card-header">General</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <label class="form-label">Architecture Relevant</label>
+                <select asp-for="ArchitectureRelevant" asp-items="Model.YesNoOptions" class="form-select"></select>
+            </div>
+            <div class="col">
+                <label class="form-label">Power Steering ID</label>
+                <input type="text" name="PowerSteeringId" class="form-control" value="@Model.PowerSteeringId" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label class="form-label">DCU</label>
+                <select asp-for="DcuId" asp-items="Model.DCUs" class="form-select">
+                    <option selected></option>
+                </select>
+            </div>
+            <div class="col">
+                <label class="form-label">Country</label>
+                <select asp-for="CountryId" asp-items="Model.Countries" class="form-select">
+                    <option selected></option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">Project Details</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <label class="form-label">Key Project</label>
+                <select asp-for="KeyProject" asp-items="Model.YesNoOptions" class="form-select"></select>
+            </div>
+            <div class="col">
+                <label class="form-label">FTEs Assigned</label>
+                <input type="text" name="FTEsAssigned" class="form-control" value="@Model.FTEsAssigned" />
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <label>Executive Short Description</label>
+				<input type="text" name="ExecutiveShortDescription" id="ExecutiveShortDescription" class="form-control" value="@Model.ExecutiveShortDescription" maxlength="120" onKeyUp="count_chars()"/>
+				<div class="text-muted">Text entry is limited to 120 characters. Character count: <span id="executiveDescCharsCount"></span></div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <label class="form-label">Business Process - L1</label>
+                <select asp-for="BusinessProcessL1Id" asp-items="Model.BusinessProcessL1s" class="form-select">
+                    <option selected></option>
+                </select>
+            </div>
+            <div class="col">
+                <label class="form-label">Business Process - L2</label>
+                <select asp-for="BusinessProcessL2Id" asp-items="Model.BusinessProcessL2s" class="form-select">
+                    <option selected></option>
+                </select>
+            </div>
+            <div class="col">
+                <label class="form-label">Business Process - L3</label>
+                <select asp-for="BusinessProcessL3Id" asp-items="Model.BusinessProcessL3s" class="form-select">
+                    <option selected></option>
+                </select>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <label class="form-label">Methodology</label>
+                <select asp-for="Methodology" asp-items="Model.Methodologies" class="form-select">
+                    <option selected></option>
+                </select>
+            </div>
+            <div class="col">
+                <label class="form-label">Digital</label>
+                <select asp-for="Digital" asp-items="Model.YesNoOptions" class="form-select"></select>
+            </div>
+            <div class="col">
+                <label class="form-label">Replicated</label>
+                <select asp-for="Replicated" asp-items="Model.YesNoOptions" class="form-select"></select>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <label class="form-label">Project Repository Link</label>
+                <input type="text" name="ProjectRepositoryLink" class="form-control" value="@Model.ProjectRepositoryLink" />
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,132 @@
+﻿@model DemandRequestViewModel
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a asp-area="" asp-controller="Home" asp-action="Index">
+            <i class="fa-solid fa-home" style="display: inline-block; margin-right: 5px;"></i> IT Demand List
+        </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Demand Request</li>
+  </ol>
+</nav>
+
+<h2 class="mt-0 mb-3 h3">
+    <i class="fa-solid fa-file-pen"></i> IT Demand Request
+    <span id="demandIdDisplay" style="float: right; font-size: 18px; margin-top: 7px; padding: 5px; border-radius: 4px; background-color: #f5f5f5;">IT-Demand-@Model.Id</span>
+</h2>
+
+@if (Model.CancelledOn.HasValue)
+{
+    <div class="alert alert-warning" role="alert">
+        <h5 class="card-title">Demand Cancelled</h5>
+        The Demand Request [@Model.Name] was cancelled by @Model.CancelledByDisplayName on @(Model.CancelledOn?.ToString("MMMM d, yyyy") ?? string.Empty).
+        <div class="mt-3">
+            <button type="button" class="btn btn-primary" id="btnReinstate"><i class="fa-solid fa-rotate-left"></i> Reinstate Demand</button>
+        </div>
+    </div>
+}
+
+<div id="demandStatusFeedback"></div>
+<div id="errorMsg"></div>
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab" aria-controls="overview" aria-selected="true">
+            <i class="far fa-file-lines"></i> Overview
+        </button>
+    </li>
+    @if (Model.SubmittedForReview)
+    {
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pmo-review-tab" data-bs-toggle="tab" data-bs-target="#pmo-review" type="button" role="tab" aria-controls="pmo-review" aria-selected="false">
+                <i class="fas fa-check"></i> PMO Review
+            </button>
+        </li>
+    }
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="project-info-tab" data-bs-toggle="tab" data-bs-target="#project-info" type="button" role="tab" aria-controls="project-info" aria-selected="false">
+            <i class="far fa-rectangle-list"></i> Project Info
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="project-status-tab" data-bs-toggle="tab" data-bs-target="#project-status" type="button" role="tab" aria-controls="project-status" aria-selected="false">
+            <i class="fas fa-chart-line"></i> Project Status
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="attachments-tab" data-bs-toggle="tab" data-bs-target="#attachments" type="button" role="tab" aria-controls="attachments" aria-selected="false">
+            <i class="fas fa-paperclip"></i> Attachments
+        </button>
+    </li>
+</ul>
+
+<form id="demandRequestForm" enctype="multipart/form-data">
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(m => m.DemandState)
+    @Html.HiddenFor(x => x.SubmittedForReview)
+    @Html.HiddenFor(x => x.PmoReviewedOnDate)
+    @*@Html.HiddenFor(x => x.IsPmo)
+    @Html.HiddenFor(x => x.IsBusinessConsulting)*@
+    @Html.HiddenFor(x => x.RequestCorrectionsByDisplayName)
+    @Html.HiddenFor(x => x.RequestCorrectionsDate)
+    @Html.HiddenFor(x => x.CreatedById)
+    @Html.HiddenFor(x => x.CreatedDate)
+    @Html.HiddenFor(x => x.CancelledOn)
+
+    <!-- Tab panes -->
+    <div class="tab-content" id="vue-container">
+      <div class="tab-pane active pt-2" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+          <partial name="_DemandRequestOverview" />
+      </div>
+      <div class="tab-pane" id="pmo-review" role="tabpanel" aria-labelledby="pmo-review-tab">
+          <partial name="_DemandRequestPmoReview" />
+      </div>
+      <div class="tab-pane" id="project-info" role="tabpanel" aria-labelledby="project-info-tab">
+          <partial name="_DemandRequestProjectInfo" />
+      </div>
+      <div class="tab-pane" id="project-status" role="tabpanel" aria-labelledby="project-status-tab">
+          <partial name="_DemandRequestProjectStatus" />
+      </div>
+      <div class="tab-pane" id="attachments" role="tabpanel" aria-labelledby="attachments-tab">
+            <partial name="_DemandRequestAttachments" />
+      </div>
+    </div>
+
+    @if (!Model.SubmittedForReview)
+    {
+        <partial name="_DemandSaveInfo" />
+    }
+
+    <div id="saveAlert">
+        <div class="alert alert-success alert-dismissible" role="alert">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <span id="saveMsg"></span>
+        </div>
+    </div>
+
+    <div id="validationErrorsAlert">
+        <div class="alert alert-warning alert-dismissible" role="alert">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> <strong>Field Validation Errors Detected: </strong> Please correct any field validation errors before submitting.
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="d-flex" style="gap: 10px;" id="formActions">
+        <button type="button" class="btn btn-danger mr-3" id="btnDeleteDemand"><i class="far fa-trash-can"></i> Delete</button>
+	    <button type="button" class="btn btn-warning me-auto" id="btnCancelDemand"><i class="fas fa-ban"></i> Cancel Request</button>
+		
+        <a class="btn btn-link ms-auto" asp-area="" asp-controller="Home" asp-action="Index">Cancel</a>
+	    <button type="button" class="btn btn-primary" id="btnSave">Save</button>
+        <button type="submit" class="btn btn-primary">Save &amp; Close</button>
+        <button type="button" class="btn btn-secondary" id="btnSaveSubmit">Save &amp; Submit</button>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="~/js/demand-form.js"></script>
+    <script src="~/js/demand-attachment.js"></script>
+    <script type="text/javascript" src="~/js/plug-ins/jquery.dirtyforms.min.js"></script>
+}

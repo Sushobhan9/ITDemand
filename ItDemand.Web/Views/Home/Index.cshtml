@@ -1,0 +1,323 @@
+﻿<div class="row">
+    <div class="col-md-5">
+        <div class="float-start" style="padding: 0 10px;">
+            <i class="fas fa-list fa-3x"></i>
+        </div>
+        <div>
+            <div>
+                <strong>Information Technology Demand Listing</strong>
+            </div>
+            <div class="text-muted">Costs shown below are in US dollars.</div>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="float-end">
+            <a class="btn btn-primary mt-1" asp-area="" asp-controller="Demand" asp-action="DemandRequestForm">
+                <i class="fas fa-plus"></i> New Demand
+            </a>
+            @*<a href="@Url.Action("NewDemandRequest", "Its")" class="btn btn-primary btn-sm pull-right m-t-xs"><i class="fa fa-plus" aria-hidden="true"></i> New Demand</a>*@
+        </div>
+    </div>
+</div>
+
+<div class="card card-body bg-light mt-3 mb-3">
+     <div class="row">
+         <div class="col-md-4">
+            <label style="display: inline-block; width: 170px; font-weight: 600;">
+                Filter by Business Unit:
+            </label>
+            <select class="form-select form-select-sm" style="display: inline-block; width: 400px;"
+                    name="filterByBusinessUnit"
+                    id="filterByBusinessUnit"
+                    data-source="/Demand/BusinessUnits"
+                    data-valueKey="id"
+                    data-displayKey="name">
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label style="display: inline-block; width: 110px; font-weight: 600;">
+                Filter by State:
+            </label>
+            <select class="form-select form-select-sm" style="display: inline-block; width: 400px;"
+                    name="filterByState"
+                    id="filterByState"
+                    data-source="/Demand/DemandStates"
+                    data-valueKey="value"
+                    data-displayKey="text"></select>
+        </div>
+     </div>
+     <div class="row mt-3">
+        <div id="projectType-filters" class="col-md-12">
+            <span style="font-weight: 600;">Project Type:  </span>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="projectTypes" id="projectTypes_All" value="0">
+              <label class="form-check-label" for="projectTypes_All">All</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="projectTypes" id="projectTypes_Unassigned" value="5">
+              <label class="form-check-label" for="projectTypes_Unassigned"><i class="fa fa-bell"></i> Unassigned</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="projectTypes" id="projectTypes_L1" value="8">
+              <label class="form-check-label" for="projectTypes_L1"><i class="fa fa-map-marker"></i> Proceed Locally (L1)</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="projectTypes" id="projectTypes_L2" value="9">
+              <label class="form-check-label" for="projectTypes_L2"><i class="fa fa-bolt"></i> Proceed Locally (L2)</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="projectTypes" id="projectTypes_L3" value="10">
+              <label class="form-check-label" for="projectTypes_L3"><i class="fa fa-rocket"></i> Fast Track (L3)</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="projectTypes" id="projectTypes_L4" value="11">
+              <label class="form-check-label" for="projectTypes_L4"><i class="fa fa-star"></i> Big Project (L4)</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table id="tblDemands" class="table" style="font-size: 12px;">
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th>Name</th>
+            <th>State</th>
+            <th>Request Owner</th>
+            <th>Project Sponsor</th>
+            <th>Project Manager</th>
+            <th>Funding BU</th>
+            <th>IT Head</th>
+            <th>Application Type</th>
+            <th>Users Impacted</th>
+            <th>Estimated Cost</th>
+            <th>Security Assessment</th>
+            <th>Estimated Start</th>
+            <th>Estimated End</th>
+            <th>Comments</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+@section scripts {
+    <environment include="Development">
+        <script src="~/js/dashboard-settings-cache.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/demand-dashboard.min.js" asp-append-version="true"></script>
+    </environment>
+
+    <script>
+        $(document).ready(function () {
+            let table = null;
+            let buOptionsPromise = getBusinessUnitOptions();
+
+            buOptionsPromise.then(function (result) {
+                let demandStatePromise = getDemandStateOptions();
+
+                demandStatePromise.then(function (result) {
+                    const filterSettings = DashboardSettingsCache.getItDashboardSettings();
+
+                    table = $('#tblDemands').DataTable({
+                        "order": [[1, "desc"]],
+                        "ajax": {
+                            "url": '/Home/Demands?businessUnitFilter=' + filterSettings.itBusinessUnit + '&projectType=' + filterSettings.itProjectType + '&demandState=' + filterSettings.itDemandState
+                        },
+                        "initComplete": function (settings, json) {
+                            // need to initialize tooltips once the data has been loaded into the table
+                            // and the rows for the tooltips actually exist
+                            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+                        },
+                        "columns": [
+                            { 
+                                data: 'executionType',
+                                "render":
+                                    function (data) {
+                                        switch (data) {
+                                            case App.WorkflowTypes.ItsDemandReview:
+                                                return '<i class="fa fa-bell" title="Unassigned"></i>';
+                                            case App.WorkflowTypes.ProceedLocallyL1:
+                                                return '<i class="fa fa-map-marker" title="Proceed Locally (L1)"></i>';
+                                            case App.WorkflowTypes.ProceedLocallyL2:
+                                                return '<i class="fa fa-bolt" title="Proceed Locally with Additional Scrutiny (L2)"></i>';
+                                            case App.WorkflowTypes.FastTrackL3:
+                                                return '<i class="fa fa-rocket" title="Fast Track (L3)"></i>';
+                                            case App.WorkflowTypes.BigProjectL4:
+                                                return '<i class="fa fa-star" title="Big Project (L4)"></i>';
+                                            default:
+                                                return '<i class="fa fa-bell" title="Unassigned"></i>';
+                                        }
+                                    },
+                                'orderable': false 
+                            },
+                            { 
+                                data: 'id',
+                                "render":
+                                    function (data, type, row) {
+                                        if (type === "display") {
+                                            return "<a href='/Demand/DemandRequestForm/" + data + "'>Demand-" + data + "</a>";
+                                        }
+                                        return data;
+                                    },
+                            },
+                            { data: 'name' },
+                            { data: 'demandStateDisplay' },
+                            { data: 'requestOwner' },
+                            { data: 'requestSponsor' },
+                            { data: 'projectManager' },
+                            { data: 'fundingBusinessUnit' },
+                            { data: 'itHead' },
+                            { data: 'applicationType' },
+                            { data: 'usersImpacted' },
+                            { data: 'estimatedCost' },
+                            { data: 'securityAssessment' },
+                            { data: 'startDate', "render": function (value) { return renderDate(value); } },
+                            { data: 'endDate', "render": function (value) { return renderDate(value); } },
+                            {
+                                data: 'comments',
+                                "render":
+                                    function (value) {
+                                        if (value) {
+                                            return '<div data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="' +
+                                                value +
+                                                '">' +
+                                                '<i class="fa fa-comment" aria-hidden="true"></i>' +
+                                                '</div>';
+                                        } else {
+                                            return '';
+                                        }
+
+                                    },
+                                "orderable": false
+                            }
+                        ]
+                    });
+                });
+            });
+
+            function filterChanged() {
+                const businessFilter = $("#filterByBusinessUnit option:selected").val();
+                const stateFilter = $("#filterByState option:selected").val();
+                const projectTypeFilter = getProjectTypesValue();
+
+                if (table) {
+                    table.ajax.url('/Home/Demands?businessUnitFilter=' + businessFilter + '&projectType=' + projectTypeFilter + '&demandState=' + stateFilter);
+                    table.ajax.reload();
+                } else {
+                    alert('Error: Unable to retrieve handle to Project table.');
+                }
+            }
+
+            $("#filterByBusinessUnit").change(function () {
+                DashboardSettingsCache.setItBusinessUnit($("#filterByBusinessUnit option:selected").val());
+                filterChanged();
+            });
+
+            $("#filterByState").change(function () {
+                DashboardSettingsCache.setItDemandState($("#filterByState option:selected").val());
+                filterChanged();
+            });
+
+            $("#projectType-filters input").click(function () {
+                DashboardSettingsCache.setItProjectType(getProjectTypesValue());
+                filterChanged();
+            });
+
+            $("select[name='tblDemands_length']").change(function () {
+                const optionSelected = this.value;
+                DashboardSettingsCache.setItDataTablePageSize(optionSelected);
+            });
+        });
+
+        function getBusinessUnitOptions() {
+            // https://travishorn.com/populate-select-via-ajax-f2f088a47750
+            const $selectCtrl = $('#filterByBusinessUnit');
+            $selectCtrl.append('<option value="">All</option>'); // add a default 'all' option
+            
+            // use jQuery promise/deferred object cause IE11 does not support ES6 Promises
+            let promise = $.ajax({
+                    url: $selectCtrl.attr('data-source'),
+                    dataType: "json",
+                    cache: false
+                }).done(function (data) {
+                    if (data.success === true) {
+                        data.options.map(function (option) {
+                            const $option = $('<option>');
+
+                        $option
+                            .val(option[$selectCtrl.attr('data-valueKey')])
+                            .text(option[$selectCtrl.attr('data-displayKey')]);
+
+                            $selectCtrl.append($option);
+                        });
+
+                        // Set filter options from settings cache.
+                        const filterSettings = DashboardSettingsCache.getItDashboardSettings();
+                        $("#filterByBusinessUnit").val(filterSettings.itBusinessUnit);
+                    } else {
+                        alert("Error: " + data.message);
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    console.log('something went wrong: ', textStatus, errorThrown);
+                });
+
+            return promise;
+        }
+
+        function getDemandStateOptions() {
+            const $selectCtrl = $('#filterByState');
+            $selectCtrl.append('<option value="0">All</option>'); // add a default 'all' option
+
+            // use jQuery promise/deferred object cause IE11 does not support ES6 Promises
+            let promise = $.ajax({
+                url: $selectCtrl.attr('data-source'),
+                dataType: "json",
+                cache: false
+            }).done(function (data) {
+                if (data.success === true) {
+                    data.options.map(function (option) {
+                        const $option = $('<option>');
+
+                        $option
+                            .val(option[$selectCtrl.attr('data-valueKey')])
+                            .text(option[$selectCtrl.attr('data-displayKey')]);
+
+                        $selectCtrl.append($option);
+                    });
+
+                    // Set filter options from settings cache.
+                    const filterSettings = DashboardSettingsCache.getItDashboardSettings();
+                    $("#filterByState").val(filterSettings.itDemandState);
+                } else {
+                    alert("Error: " + data.message);
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.log('something went wrong: ', textStatus, errorThrown);
+            });
+
+            return promise;
+        }
+
+        function getProjectTypesValue() {
+            const checked = $("#projectType-filters input:checked");
+            return parseInt(checked.val());
+        }
+
+        function renderDate(value) {
+            const monthShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+            if (value === null) return "";
+
+            //const pattern = /Date\(([^)]+)\)/;
+            //const results = pattern.exec(value);
+            //const dt = new Date(parseFloat(results[1]));
+            const dt = new Date(value);
+
+            return dt.getDate() + " " + monthShortNames[dt.getMonth()] + " " + dt.getFullYear();
+        }
+
+    </script>
+}
