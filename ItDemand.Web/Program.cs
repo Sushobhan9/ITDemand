@@ -1,13 +1,11 @@
 using ItDemand.Domain.DataContext;
 using ItDemand.Web.Configuration;
 using ItDemand.Web.Services;
-using Microsoft.AspNetCore.Server.IISIntegration;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.Services.AddAuthentication(IISDefaults.AuthenticationScheme);
 builder.Services.AddHttpContextAccessor();
 
 // Add services to the container.
@@ -16,15 +14,6 @@ builder.Services
 	.AddMvcOptions(options => options.ModelMetadataDetailsProviders.Add(new CustomMetadataProvider()));
 
 builder.Services.AddMemoryCache(); // cache for claims that are loaded from the db
-
-//builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
-//   .AddNegotiate();
-
-//builder.Services.AddAuthorization(options =>
-//{
-//	options.FallbackPolicy = options.DefaultPolicy;
-//});
-
 builder.Services.AddDbContext<ItDemandContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ItDemand")));
 builder.Services.AddScoped<ApplicationLog>();
 builder.Services.AddAutoMapper(typeof(ItDemand.Web.ViewModels.AutoMapper).GetTypeInfo().Assembly);
@@ -39,9 +28,6 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 app.UseMiddleware<AuthMiddleware>();
 app.UseRouting();
-
-//app.UseAuthentication();
-//app.UseAuthorization();
 
 app.MapControllerRoute(
 	name: "default",

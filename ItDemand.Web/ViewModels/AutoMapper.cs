@@ -9,7 +9,12 @@ namespace ItDemand.Web.ViewModels
 	{
 		public AutoMapper()
 		{
+            CreateMap<ActiveDirectoryUser, User>();
             CreateMap<Attachment, AttachmentViewModel>();
+
+            CreateMap<Checklist, ChecklistViewModel>().ReverseMap();
+            CreateMap<ChecklistApprover, ChecklistApproverViewModel>().ReverseMap();
+            CreateMap<ChecklistQuestion, ChecklistQuestionViewModel>().ReverseMap();
 
             CreateMap<ISelectListOption, SelectOptionViewModel>();
 
@@ -18,7 +23,7 @@ namespace ItDemand.Web.ViewModels
 				.ForMember(d => d.Text, opt => opt.MapFrom(x => x.Name));
 
 			CreateMap<User, UserViewModel>().ReverseMap();
-			CreateMap<ActiveDirectoryUser, User>();
+			
 
 			CreateMap<DemandRequest, DemandRequestViewModel>()
 				.ForMember(x => x.AffectedBusinessUnits, d => d.MapFrom(m => m.AffectedBusinessUnits.Select(x => x.BusinessUnitId)))
@@ -40,7 +45,10 @@ namespace ItDemand.Web.ViewModels
                 .ForMember(x => x.AssignedSme, opt => opt.Ignore())
                 .ForMember(x => x.UsersImpacted, opt => opt.Ignore())
                 .ForMember(x => x.Attachments, opt => opt.Ignore())
-                .ForMember(x => x.RequestCorrectionsById, opt => opt.Ignore());
+                .ForMember(x => x.CancelledById, opt => opt.Ignore())
+                .ForMember(x => x.CancelledBy, opt => opt.Ignore())
+                .ForMember(x => x.RequestCorrectionsById, opt => opt.Ignore())
+                .ForMember(x => x.RequestCorrectionsBy, opt => opt.Ignore());
 		}
 	}
 }

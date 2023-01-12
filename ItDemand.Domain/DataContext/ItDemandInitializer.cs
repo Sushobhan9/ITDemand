@@ -806,7 +806,7 @@ namespace ItDemand.Domain.DataContext
 					new User { Id = 1, DisplayName = "Richard Dillon", UserName = @"MUCLVAD1\rd028u", Email = "Richard.Dillon@linde.com", Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.Admin },
 					new User { Id = 2, DisplayName = "Darren Williams", UserName = @"LINDE\UK0C0B", Email = "Darren.Williams@linde.com", Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.Pmo },
 					new User { Id = 3, DisplayName = "Nelson Do Rego", UserName = @"LINDE\UK0C09", Email = "Nelson.DoRego@boc.com", Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.Pmo },
-					new User { Id = 4, DisplayName = "Lisa Korn", @UserName = @"LINDE\f4gz08", Email = "Lisa.Korn@linde.com", Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.Pmo },
+					new User { Id = 4, DisplayName = "Lisa Korn", @UserName = @"LINDE\f4gz08", Email = "Lisa.Korn@linde.com", Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User },
 					new User { Id = 5, DisplayName = "Geoffrey Munch", @UserName = @"LINDE\f8kx29", Email = "Geoffrey.Munch@linde.com", Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.Pmo },
 					new User { Id = 6, DisplayName = "Janet Wright", UserName = @"LINDE\UK0CB7", Email = "Janet.Wright@linde.com", Created = DateTimeOffset.Now },
 					new User { Id = 7, DisplayName = @"Jason O'Brien", UserName = @"LINDE\SP01B8", Email = @"Jason.O'Brien@boc.com", Created = DateTimeOffset.Now },
@@ -903,32 +903,6 @@ namespace ItDemand.Domain.DataContext
 					context.Database.CloseConnection();
 				}
 			}
-
-     //       if (!context.Workflows.Any())
-     //       {
-     //           var workflows = new List<Workflow>
-     //           {
-					//new Workflow { Id = WorkflowType.ItDemandReview, Name = WorkflowType.ItDemandReview.GetDescription<WorkflowType>() },
-     //               new Workflow { Id = WorkflowType.ProceedLocallyL1, Name = WorkflowType.ProceedLocallyL1.GetDescription<WorkflowType>() },
-     //               new Workflow { Id = WorkflowType.ProceedLocallyL2, Name = WorkflowType.ProceedLocallyL2.GetDescription<WorkflowType>() },
-     //               new Workflow { Id = WorkflowType.FastTrackL3, Name = WorkflowType.FastTrackL3.GetDescription<WorkflowType>() },
-     //               new Workflow { Id = WorkflowType.BigProjectL4, Name = WorkflowType.BigProjectL4.GetDescription<WorkflowType>() }
-     //           };
-
-     //           workflows.ForEach(s => context.Workflows.Add(s));
-
-     //           context.Database.OpenConnection();
-     //           try
-     //           {
-     //               context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.Workflows ON");
-     //               context.SaveChanges();
-     //               context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.workflows OFF");
-     //           }
-     //           finally
-     //           {
-     //               context.Database.CloseConnection();
-     //           }
-     //       }
 
             if (context.Workflows.Any()) return;
 
@@ -1390,20 +1364,28 @@ namespace ItDemand.Domain.DataContext
         private static void InitializeSecurityRoles(ItDemandContext context)
 		{
 			const string webAppServiceAccount = @"LINDE\s4qs83";
-			//const string ownersGroup = @"MUCLVAD1\DGD0_PX_LEA_Enam_Developers";
+            const string lindeIsToolsTeam = @"LINDE\GLGGCELindeISToolsTeam";
+            //const string ownersGroup = @"MUCLVAD1\DGD0_PX_LEA_Enam_Developers";
 
-			var sqlAddServiceAccount =
+            var sqlAddServiceAccount =
 				$"CREATE USER[{webAppServiceAccount}] FOR LOGIN[{webAppServiceAccount}]" +
 				$"EXEC sp_addrolemember N'db_datawriter', N'{webAppServiceAccount}'" +
 				$"EXEC sp_addrolemember N'db_datareader', N'{webAppServiceAccount}'";
 
 			context.Database.ExecuteSqlRaw(sqlAddServiceAccount);
 
-			//var sqlAddOwnersGroup =
-			//	$"CREATE USER [{ownersGroup}] FOR LOGIN [{ownersGroup}]" +
-			//	$"EXEC sp_addrolemember N'db_owner', N'{ownersGroup}'";
+            var sqlLindeIsToolsTeam =
+            	$"CREATE USER [{lindeIsToolsTeam}] FOR LOGIN [{lindeIsToolsTeam}]" +
+                $"EXEC sp_addrolemember N'db_datawriter', N'{lindeIsToolsTeam}'" +
+                $"EXEC sp_addrolemember N'db_datareader', N'{lindeIsToolsTeam}'";
 
-			//context.Database.ExecuteSqlRaw(sqlAddOwnersGroup);
-		}
-	}
+            context.Database.ExecuteSqlRaw(sqlLindeIsToolsTeam);
+
+            //var sqlAddOwnersGroup =
+            //	$"CREATE USER [{ownersGroup}] FOR LOGIN [{ownersGroup}]" +
+            //	$"EXEC sp_addrolemember N'db_owner', N'{ownersGroup}'";
+
+            //context.Database.ExecuteSqlRaw(sqlAddOwnersGroup);
+        }
+    }
 }

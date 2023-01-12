@@ -1,0 +1,83 @@
+﻿@using ItDemand.Domain.Enums;
+@using Microsoft.AspNetCore.Html;
+@model ProjectViewModel
+
+@functions {
+    public static HtmlString GetStatusIcon(StatusType status)
+    {
+        switch (status) {
+            case StatusType.Approved:
+                return new HtmlString("<i class=\"fas fa-flag status-approved\" title=\"Approved\"></i>");
+            case StatusType.WaitingApproval:
+                return new HtmlString("<i class=\"fas fa-flag status-waiting-approval\" title=\"Waiting Approval\"></i>");
+            case StatusType.InProgress:
+                return new HtmlString("<i class=\"fas fa-flag status-in-progress\" title=\"In Progress\"></i>");
+            case StatusType.Rejected:
+                return new HtmlString("<i class=\"fas fa-flag status-rejected\" title=\"Rejected\"></i>");
+            default:
+                return new HtmlString("<i class=\"fas fa-flag status-not-started\" title=\"Not Started Yet\"></i>");
+        }
+    }
+}
+
+<div class="project-content">
+    @*<div class="project-sidebar navtree" id="navigation">*@
+    <div class="project-sidebar">
+        <p><strong>@Model.Name</strong></p>
+        <div class="mb-2">
+            <div id="statusLink">
+                <a href="#status" class="active">Project Status</a>
+            </div>
+            <div>
+                <a href="#information">Project Information</a>
+            </div>
+        </div>
+        <ul class="navtree" id="navigation">
+        @*<ul>*@
+            <li>
+                <span>
+                    <i class="far fa-square-minus"></i> Demand Checklists
+                </span>
+                <ul>
+                    @foreach (var document in Model.Checklists.OrderBy(x => x.SequenceNumber))
+                    {
+                    <li>
+                        @GetStatusIcon(document.Status)
+                        @*<a class="@className" href="@string.Format("#{0}={1}", className, document.Id)">@document.Name</a>*@
+                        @document.Name
+                    </li>
+                    }
+                </ul>
+            </li>
+            <li>
+                <span>
+                    <i class="far fa-square-minus"></i> Project Checklists
+                </span>
+            </li>
+            <li>
+                <span><i class="far fa-square-minus"></i> Project Documents</span>
+                <ul>
+                    <li><i class="fa fa-link"></i> <a href="#information?showAttachmentTab=true" id="attachmentLink"> Attachments</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="project-right">
+        <p>
+            We provide a variety of services 
+            for you to learn, thrive and also 
+            have fun! Free Tutorials, Millions 
+            of Articles, Live, Online and 
+            Classroom Courses ,Frequent Coding 
+            Competitions, Webinars by Industry 
+            Experts, Internship opportunities 
+            and Job Opportunities.
+        </p>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $("#navigation").navtree();
+    </script>
+}

@@ -18,23 +18,14 @@ namespace ItDemand.Domain.Models
         public string Name { get; set; } = string.Empty;
         public StatusType Status { get; set; } = StatusType.New;
         public double SequenceNumber { get; set; }
+        public DateTime? MeetingDate { get; set; }
 
         public int? WorkflowItemId { get; set; }
         [ForeignKey("WorkflowItemId")]
         public virtual WorkflowItem WorkflowItem { get; set; } = null!;
 
-        public string AssociatedStandard { get; set; } = string.Empty;
-        public string GateReviewDescription { get; set; } = string.Empty;
-
-        public DateTime? MeetingDate { get; set; }
-        public string MeetingMinutesBy { get; set; } = string.Empty;
-        public string MeetingMinutesByUserName { get; set; } = string.Empty;
-
-        public DateTime? RevisionDate { get; set; }
-
-        public string Scope { get; set; } = string.Empty;
-
         public string AdditionalComments { get; set; } = string.Empty;
+        public string GateReviewDescription { get; set; } = string.Empty;        
 
         public string ReviewComments { get; set; } = string.Empty;
                 

@@ -14,12 +14,17 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+   margin-bottom: 40px !important;
 }
 
 /* Bootstrap Mods */
 .footer {
    line-height: 40px !important;
+   position: absolute;
+   width: 100%;
+   bottom: 0;
+   left: 0;
+   background-color: #fafafa;
 }
 
 .breadcrumb {
@@ -77,4 +82,48 @@ body {
 
 .input-group-sm .input-group-overlay {
    top: 8px;
+}
+
+/* Coloring on Status Flags */
+.status-approved {
+   color: #1c813f; 
+}
+
+.status-rejected {
+   color: #ff0000;
+}
+
+.status-waiting-approval {
+   color: #811c5e; 
+}
+
+.status-in-progress {
+   color: #1c2b81; 
+}
+
+.status-not-started {
+   color: #81711c; 
+}
+
+.project-content {
+   display: flex;
+   flex-direction: row;
+}
+
+.project-sidebar {
+   flex: 15%;
+   padding: 8px;
+   height: 100vh;
+   background-color: #D2E1EB;
+}
+
+.project-sidebar a {
+   text-decoration: none;
+}
+
+.project-right {
+   flex: 85%;
+   padding: 8px;
+   background-color: white;
+   height: 100vh;
 }

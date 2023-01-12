@@ -1,0 +1,44 @@
+﻿.navtree-heading {
+	margin-bottom: 15px;
+}
+
+.navtree {
+	min-height: 20px;
+}
+
+.navtree span {
+	margin: 5px 0;
+}
+
+ul.navtree {
+	padding: 0;
+	/*margin-left: -10px;*/
+}
+
+.navtree ul {
+	padding: 0;
+	/*margin-left: -10px;*/
+}
+
+.navtree li {
+	list-style-type: none;
+	position: relative;
+	left: 5px;
+}
+
+.navtree li.parent_li ul {
+	margin-left: 15px;
+}
+
+.navtree li span {
+	display: inline-block;
+	text-decoration: none
+}
+
+.navtree li.parent_li > span {
+	cursor: pointer
+}
+
+.navtree a.active {
+	font-weight: bold;
+}

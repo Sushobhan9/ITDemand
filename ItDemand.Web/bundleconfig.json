@@ -4,7 +4,8 @@
 		"inputFiles": [
 			"wwwroot/lib/bootstrap/css/bootstrap.css",
 			"wwwroot/lib/bootstrap-multiselect/css/bootstrap-multiselect.css",
-			"wwwroot/css/site.css"
+			"wwwroot/css/site.css",
+			"wwwroot/css/navtree.css"
 		]
 	},
 	{
@@ -19,8 +20,9 @@
 		"outputFileName": "wwwroot/js/main.min.js",
 		"inputFiles": [
 			"wwwroot/lib/jquery/dist/jquery.js",
-			"wwwroot/lib/bootstrap/js/bootstrap.js",
+			"wwwroot/lib/bootstrap/js/bootstrap.bundle.js",
 			"wwwroot/lib/bootstrap-multiselect/js/bootstrap-multiselect.js",
+			"wwwroot/js/plug-ins/jquery-navtree.js",
 			"wwwroot/js/app.js",
 			"wwwroot/js/app.dialogs.usersearch.js",
 			"wwwroot/js/site.js"

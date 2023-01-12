@@ -379,7 +379,6 @@ namespace ItDemand.Domain.Migrations
                     PmoReviewComments = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NewApplication = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProposedPlatformId = table.Column<int>(type: "int", nullable: true),
-                    ItPlatformId = table.Column<int>(type: "int", nullable: true),
                     DecommissionRequired = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AssignedSmeId = table.Column<int>(type: "int", nullable: true),
                     ItSegmentId = table.Column<int>(type: "int", nullable: true),
@@ -477,8 +476,8 @@ namespace ItDemand.Domain.Migrations
                         principalTable: "DCUs",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_DemandRequests_ItPlatforms_ItPlatformId",
-                        column: x => x.ItPlatformId,
+                        name: "FK_DemandRequests_ItPlatforms_ProposedPlatformId",
+                        column: x => x.ProposedPlatformId,
                         principalTable: "ItPlatforms",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -649,15 +648,10 @@ namespace ItDemand.Domain.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     SequenceNumber = table.Column<double>(type: "float", nullable: false),
-                    WorkflowItemId = table.Column<int>(type: "int", nullable: false),
-                    AssociatedStandard = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GateReviewDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MeetingDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    MeetingMinutesBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MeetingMinutesByUserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RevisionDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Scope = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WorkflowItemId = table.Column<int>(type: "int", nullable: false),
                     AdditionalComments = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GateReviewDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ReviewComments = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -939,11 +933,6 @@ namespace ItDemand.Domain.Migrations
                 column: "ItHeadId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DemandRequests_ItPlatformId",
-                table: "DemandRequests",
-                column: "ItPlatformId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_DemandRequests_ItSegmentId",
                 table: "DemandRequests",
                 column: "ItSegmentId");
@@ -967,6 +956,11 @@ namespace ItDemand.Domain.Migrations
                 name: "IX_DemandRequests_ProjectManagerId",
                 table: "DemandRequests",
                 column: "ProjectManagerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DemandRequests_ProposedPlatformId",
+                table: "DemandRequests",
+                column: "ProposedPlatformId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DemandRequests_RequestCorrectionsById",

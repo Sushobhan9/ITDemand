@@ -41,7 +41,7 @@ namespace ItDemand.Web.Services
             _isTesting = true;
             Options.PickupDirectory = @"c:\temp\itdemand";
             Options.NoReplyAddress = new MailAddress("itdemand-dev@linde.com", "IT Demand System (Dev)");
-#elif STAGE
+#elif STAGING
             _baseUrl = "http://itdemandstage.linde.grp";
             _isTesting = true;
             Options.NoReplyAddress = new MailAddress("itdemand-stage@linde.com", "IT Demand System (Stage)");

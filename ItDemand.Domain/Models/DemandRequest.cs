@@ -113,7 +113,7 @@ namespace ItDemand.Domain.Models
         public string NewApplication { get; set; } = string.Empty; // Yes/No
 
         public int? ProposedPlatformId { get; set; }
-        [ForeignKey("ItPlatformId")]
+        [ForeignKey("ProposedPlatformId")]
         public virtual ItPlatform? ProposedPlatform { get; set; }
 
         public string DecommissionRequired { get; set; } = string.Empty; // Yes/No

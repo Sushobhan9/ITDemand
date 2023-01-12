@@ -238,10 +238,6 @@ namespace ItDemand.Domain.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("AssociatedStandard")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("ChecklistTemplateId")
                         .IsRequired()
                         .HasColumnType("int");
@@ -256,26 +252,11 @@ namespace ItDemand.Domain.Migrations
                     b.Property<DateTime?>("MeetingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("MeetingMinutesBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MeetingMinutesByUserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ReviewComments")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("RevisionDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Scope")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -733,9 +714,6 @@ namespace ItDemand.Domain.Migrations
                     b.Property<int?>("ItHeadId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ItPlatformId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("ItSegmentId")
                         .HasColumnType("int");
 
@@ -922,8 +900,6 @@ namespace ItDemand.Domain.Migrations
 
                     b.HasIndex("ItHeadId");
 
-                    b.HasIndex("ItPlatformId");
-
                     b.HasIndex("ItSegmentId");
 
                     b.HasIndex("ModifiedById");
@@ -933,6 +909,8 @@ namespace ItDemand.Domain.Migrations
                     b.HasIndex("ProcessAreaId");
 
                     b.HasIndex("ProjectManagerId");
+
+                    b.HasIndex("ProposedPlatformId");
 
                     b.HasIndex("RequestCorrectionsById");
 
@@ -1411,10 +1389,6 @@ namespace ItDemand.Domain.Migrations
                         .WithMany()
                         .HasForeignKey("ItHeadId");
 
-                    b.HasOne("ItDemand.Domain.Models.ItPlatform", "ProposedPlatform")
-                        .WithMany()
-                        .HasForeignKey("ItPlatformId");
-
                     b.HasOne("ItDemand.Domain.Models.ItSegment", "ItSegment")
                         .WithMany()
                         .HasForeignKey("ItSegmentId");
@@ -1434,6 +1408,10 @@ namespace ItDemand.Domain.Migrations
                     b.HasOne("ItDemand.Domain.Models.User", "ProjectManager")
                         .WithMany()
                         .HasForeignKey("ProjectManagerId");
+
+                    b.HasOne("ItDemand.Domain.Models.ItPlatform", "ProposedPlatform")
+                        .WithMany()
+                        .HasForeignKey("ProposedPlatformId");
 
                     b.HasOne("ItDemand.Domain.Models.User", "RequestCorrectionsBy")
                         .WithMany()
