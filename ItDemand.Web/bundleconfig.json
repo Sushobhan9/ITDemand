@@ -5,7 +5,8 @@
 			"wwwroot/lib/bootstrap/css/bootstrap.css",
 			"wwwroot/lib/bootstrap-multiselect/css/bootstrap-multiselect.css",
 			"wwwroot/css/site.css",
-			"wwwroot/css/navtree.css"
+			"wwwroot/css/navtree.css",
+			"wwwroot/css/gateflow.css"
 		]
 	},
 	{
@@ -23,6 +24,7 @@
 			"wwwroot/lib/bootstrap/js/bootstrap.bundle.js",
 			"wwwroot/lib/bootstrap-multiselect/js/bootstrap-multiselect.js",
 			"wwwroot/js/plug-ins/jquery-navtree.js",
+			"wwwroot/js/plug-ins/jquery-gateflow.js",
 			"wwwroot/js/app.js",
 			"wwwroot/js/app.dialogs.usersearch.js",
 			"wwwroot/js/site.js"
@@ -36,6 +38,27 @@
 		"outputFileName": "wwwroot/js/demand-dashboard.min.js",
 		"inputFiles": [
 			"wwwroot/js/dashboard-settings-cache.js"
+		],
+		"minify": {
+			"enabled": true,
+			"renameLocals": true
+		}
+	},
+	{
+		"outputFileName": "wwwroot/js/demand.min.js",
+		"inputFiles": [
+			"wwwroot/js/demand-form.js",
+			"wwwroot/js/demand-attachment.js"
+		],
+		"minify": {
+			"enabled": true,
+			"renameLocals": true
+		}
+	},
+	{
+		"outputFileName": "wwwroot/js/project.min.js",
+		"inputFiles": [
+			"wwwroot/js/plug-ins/jquery-deparam.js"
 		],
 		"minify": {
 			"enabled": true,

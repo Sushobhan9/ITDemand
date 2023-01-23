@@ -11,7 +11,7 @@ namespace ItDemand.Domain.Models
 		[ForeignKey("ChecklistId")]
 		public virtual Checklist Checklist { get; set; } = null!;
 
-		public ApproverRole Role { get; set; }
+		public SecurityRole Role { get; set; }
         public ApproverType Type { get; set; }
         public bool Required { get; set; }
         public int? SortIndex { get; set; }

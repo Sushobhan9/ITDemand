@@ -20,31 +20,26 @@
     }
 }
 
-<div class="project-content">
-    @*<div class="project-sidebar navtree" id="navigation">*@
+<div class="project-content" id="projectPage" data-demandId="@Model.Id">
     <div class="project-sidebar">
         <p><strong>@Model.Name</strong></p>
-        <div class="mb-2">
-            <div id="statusLink">
-                <a href="#status" class="active">Project Status</a>
-            </div>
-            <div>
-                <a href="#information">Project Information</a>
-            </div>
-        </div>
         <ul class="navtree" id="navigation">
-        @*<ul>*@
+            <li id="statusLink">
+                <a href="#status" class="active">Project Status</a>
+            </li>
+            <li class="mb-2">
+                <a href="#information">Project Information</a>
+            </li>
             <li>
                 <span>
                     <i class="far fa-square-minus"></i> Demand Checklists
                 </span>
                 <ul>
-                    @foreach (var document in Model.Checklists.OrderBy(x => x.SequenceNumber))
+                    @foreach (var document in Model.Checklists.Where(x => !x.Name.StartsWith("Gate")).OrderBy(x => x.SequenceNumber))
                     {
                     <li>
                         @GetStatusIcon(document.Status)
-                        @*<a class="@className" href="@string.Format("#{0}={1}", className, document.Id)">@document.Name</a>*@
-                        @document.Name
+                        <a class="checklist" href="@string.Format("#{0}={1}", "checklist", document.Id)">@document.Name</a>
                     </li>
                     }
                 </ul>
@@ -53,6 +48,15 @@
                 <span>
                     <i class="far fa-square-minus"></i> Project Checklists
                 </span>
+                <ul>
+                    @foreach (var document in Model.Checklists.Where(x => x.Name.StartsWith("Gate")).OrderBy(x => x.SequenceNumber))
+                    {
+                        <li>
+                            @GetStatusIcon(document.Status)
+                            <a class="checklist" href="@string.Format("#{0}={1}", "checklist", document.Id)">@document.Name</a>
+                        </li>
+                    }
+                </ul>
             </li>
             <li>
                 <span><i class="far fa-square-minus"></i> Project Documents</span>
@@ -63,21 +67,25 @@
         </ul>
     </div>
     <div class="project-right">
-        <p>
-            We provide a variety of services 
-            for you to learn, thrive and also 
-            have fun! Free Tutorials, Millions 
-            of Articles, Live, Online and 
-            Classroom Courses ,Frequent Coding 
-            Competitions, Webinars by Industry 
-            Experts, Internship opportunities 
-            and Job Opportunities.
-        </p>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item" aria-current="page">Project</li>
+                <li class="breadcrumb-item active" aria-current="page">Status</li>
+            </ol>
+        </nav>
+        <div id="project-details">
+        </div>   
     </div>
 </div>
 
 @section Scripts {
-    <script type="text/javascript">
-        $("#navigation").navtree();
-    </script>
+    <environment include="Development">
+        <script src="~/js/plug-ins/jquery-deparam.js"></script>
+        <script src="~/js/project.js"></script>
+    </environment>
+
+    <environment exclude="Development">
+        <script src="~/js/project.min.js" asp-append-version="true"></script>
+    </environment>
 }

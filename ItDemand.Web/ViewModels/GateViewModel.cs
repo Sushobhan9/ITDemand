@@ -1,5 +1,4 @@
 ﻿using ItDemand.Domain.Enums;
-using ItDemand.Domain.Models;
 
 namespace ItDemand.Web.ViewModels
 {
@@ -7,9 +6,9 @@ namespace ItDemand.Web.ViewModels
     {
         public double Number { get; private set; }
         public string Name { get; private set; }
-        public List<Checklist> Documents { get; private set; }
+        public List<ChecklistViewModel> Documents { get; private set; }
 
-        public GateViewModel(WorkflowItem item, List<Checklist> documents)
+        public GateViewModel(WorkflowItemViewModel item, List<ChecklistViewModel> documents)
         {
             Number = item.SequenceNumber;
             Name = item.Name;

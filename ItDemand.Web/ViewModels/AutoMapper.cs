@@ -12,9 +12,44 @@ namespace ItDemand.Web.ViewModels
             CreateMap<ActiveDirectoryUser, User>();
             CreateMap<Attachment, AttachmentViewModel>();
 
-            CreateMap<Checklist, ChecklistViewModel>().ReverseMap();
-            CreateMap<ChecklistApprover, ChecklistApproverViewModel>().ReverseMap();
-            CreateMap<ChecklistQuestion, ChecklistQuestionViewModel>().ReverseMap();
+            CreateMap<Checklist, ChecklistViewModel>()
+                .ForMember(
+                    d => d.PowerSteeringId, 
+                    opt => opt.MapFrom(x => string.IsNullOrEmpty(x.DemandRequest.PowerSteeringId) ? "Not Provided" : x.DemandRequest.PowerSteeringId))
+                .ReverseMap();
+
+            CreateMap<ChecklistFormViewModel, Checklist>()
+                .ForMember(x => x.Approvers, opt => opt.Ignore())
+				.ForMember(x => x.Questions, opt => opt.Ignore());
+
+            CreateMap<ChecklistApprover, ChecklistApproverViewModel>()
+                .ReverseMap()
+                .ForMember(x => x.ChecklistId, opt => opt.Ignore())
+                .ForMember(x => x.Role, opt => opt.Ignore())
+                .ForMember(x => x.SortIndex, opt => opt.Ignore())
+                .ForMember(x => x.Type, opt => opt.Ignore());
+
+            CreateMap<ChecklistQuestion, ChecklistQuestionViewModel>()
+                .ForMember(d => d.Level, opt => opt.MapFrom(x => x.Path.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries).Length))
+				.ForMember(
+                    d => d.CustomChoices,
+                    opt => opt.MapFrom(x =>
+                        string.IsNullOrEmpty(x.CustomChoices) ? 
+                            new List<SelectListItem>() : 
+                            x.CustomChoices.Split(',', StringSplitOptions.None).Select(x => new SelectListItem { Text = x, Value = x }).ToList()))
+                .ForMember(
+                    d => d.MultiSelectAnswers,
+                    opt => opt.MapFrom(x => 
+                        string.IsNullOrEmpty(x.Answer) ? 
+                        new List<string>() : 
+                        x.Answer.Split(',', StringSplitOptions.None).ToList()))
+				.ReverseMap()
+				.ForMember(x => x.AcceptedAnswers, opt => opt.Ignore())
+				.ForMember(x => x.ChecklistId, opt => opt.Ignore())
+				.ForMember(x => x.CustomChoices, opt => opt.Ignore())
+				.ForMember(x => x.HelpText, opt => opt.Ignore())
+				.ForMember(x => x.Path, opt => opt.Ignore())
+				.ForMember(x => x.QuestionType, opt => opt.Ignore());            
 
             CreateMap<ISelectListOption, SelectOptionViewModel>();
 
@@ -49,6 +84,8 @@ namespace ItDemand.Web.ViewModels
                 .ForMember(x => x.CancelledBy, opt => opt.Ignore())
                 .ForMember(x => x.RequestCorrectionsById, opt => opt.Ignore())
                 .ForMember(x => x.RequestCorrectionsBy, opt => opt.Ignore());
-		}
+
+            CreateMap<WorkflowItem, WorkflowItemViewModel>();
+        }
 	}
 }

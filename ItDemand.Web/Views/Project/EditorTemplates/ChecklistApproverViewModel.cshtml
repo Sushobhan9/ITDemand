@@ -1,0 +1,85 @@
+﻿@using ItDemand.Domain.Enums;
+@using ItDemand.Domain.Utils;
+@model ChecklistApproverViewModel
+
+@functions {
+    public static string FormatDateMMM(DateTimeOffset? date)
+    {
+        const string format = "MMM dd yyyy";
+        return date.HasValue ? date.Value.ToString(format) : string.Empty;
+    }
+}
+
+@{
+    var index = ViewData["index"];
+    var status = (StatusType)ViewData["status"];
+}
+
+<div class="approver col-md-4">
+    <input type="hidden" name="Approvers[@index].Id" value="@Model.Id" />
+    <input type="hidden" name="Approvers[@index].Type" value="@Model.Type" />
+    <input type="hidden" name="Approvers[@index].Required" value="@Model.Required.ToString()" />
+    @if (Model.Type == ApproverType.UserPicker)
+    {
+        <div class="input-group">
+            <input type="hidden" name="Approvers[@index].Approver.Id" class="form-control" value="@(Model.Approver?.Id ?? 0)">
+            <input type="hidden" name="Approvers[@index].Approver.UserName" class="form-control" value="@(Model.Approver?.UserName ?? string.Empty)">
+            <input type="hidden" name="Approvers[@index].Approver.Email" class="form-control" value="@(Model.Approver?.Email ?? string.Empty)">
+            <input type="text" name="Approvers[@index].Approver.DisplayName" class="form-control" value="@(Model.Approver?.DisplayName ?? string.Empty)" readonly>
+            <div class="input-group-overlay cursor-pointer"><i class="fa fa-times"></i></div>
+            <span class="input-group-text cursor-pointer"><i class="fa fa-user"></i></span>
+            <span class="input-group-text">
+                <i class="fa fa-pen-to-square icon-spacer"></i> Click to Sign
+            </span>
+        </div>    
+    }
+    else if (Model.Type == ApproverType.Dropdown)
+    {
+        <div class="input-group">
+            <select id="Approvers[@index].ApprovedId" name="Approvers[@index].ApproverId" class="form-select">
+                @{
+                    <option value="" />
+                    foreach (var person in Model.ApproverList)
+                    {
+                        <option value=@person.Value selected="@(Model.ApproverId == Convert.ToInt32(person.Value))">@person.Text</option>
+                    }
+                }
+            </select>
+            @if (status == StatusType.WaitingApproval && 
+                !Model.ApprovalDate.HasValue && 
+                (Model.Approver.UserName ?? "").Equals(Model.CurrentUser.UserName, StringComparison.InvariantCultureIgnoreCase))
+            {
+                <span class="input-group-text cursor-pointer" style="background-color: #ffff00;">
+                    <i class="fa fa-pen-to-square icon-spacer"></i> Click to Sign
+                </span>
+            }            
+        </div>
+    }
+    else
+    {
+        <span>Unknown Approver Type</span>
+    }
+
+    <div class="input-group mt-1">
+        @if (status == StatusType.WaitingApproval && (Model.Approver.UserName ?? "").Equals(Model.CurrentUser.UserName, StringComparison.InvariantCultureIgnoreCase))
+        {
+            <input type="text" name="Approvers[@index].ApprovalDate" class="form-control datepicker" value="@FormatDateMMM(Model.ApprovalDate)">
+            <span class="input-group-text cursor-pointer"><i class="fa fa-calendar"></i></span>
+        }
+        else if (status == StatusType.Approved || 
+                    (status == StatusType.WaitingApproval && 
+                     Model.ApprovalDate.HasValue &&
+                    !(Model.Approver.UserName ?? "").Equals(Model.CurrentUser.UserName, StringComparison.InvariantCultureIgnoreCase)))
+        {
+            <input type="text" name="Approvers[@index].ApprovalDate" class="form-control" value="@FormatDateMMM(Model.ApprovalDate)" readonly>
+            <span class="input-group-text cursor-pointer"><i class="fa fa-calendar"></i></span>
+        }
+    </div>
+    <div class="mt-1">
+        @if (Model.Required)
+        {
+            <i class="fa fa-asterisk"></i>
+        }
+        @Model.Role
+    </div>
+</div>

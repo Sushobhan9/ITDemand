@@ -10,6 +10,7 @@ namespace ItDemand.Domain.Models
 		public string Email { get; set; } = string.Empty;
 
 		public SecurityRole SecurityRole { get; set; } = SecurityRole.User;
+		public bool IsActive { get; set; } = true;
 
 		public DateTimeOffset Created { get; set; }
 		public DateTimeOffset? LastModified { get; set; }

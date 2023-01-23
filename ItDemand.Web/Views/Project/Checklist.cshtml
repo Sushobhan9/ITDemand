@@ -1,0 +1,108 @@
+﻿@using ItDemand.Domain.Enums;
+@model ChecklistViewModel
+
+@functions {
+    public static string FormatDateMMM(DateTimeOffset? date)
+    {
+        const string format = "MMM dd yyyy";
+        return date.HasValue ? date.Value.ToString(format) : string.Empty;
+    }
+}
+
+<partial name="_ChecklistStatusAlert" />
+
+<h2 class="h4 header-underline mb-3">
+    <i class="fa fa-check"></i> @Model.Name
+</h2>
+
+<form id="checklistForm">
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.DemandRequestId)
+    @Html.HiddenFor(x => x.Status)
+
+    <h3 class="h5 header-underline">Gate Review</h3>
+    <div class="row mt-3">
+        <div class="col-md-2">Id:</div>
+        <div class="col-md-4">IT Demand-@Model.DemandRequestId</div>
+        @if (!Model.Name.Contains("IT Head"))
+        {
+            <div class="col-md-2">
+			    Meeting Date
+		    </div>
+		    <div class="col-md-4">
+                <div class="input-group">
+                    <input type="text" name="MeetingDate" class="form-control form-control-sm datepicker" value="@FormatDateMMM(Model.MeetingDate)">
+                    <span class="input-group-text cursor-pointer"><i class="fa fa-calendar"></i></span>
+                </div>
+		    </div>
+        }
+    </div>
+    
+    @if (Model.Name.Contains("IT Head"))
+    {
+        <div class="row mt-2">
+            <div class="col-md-2">
+                Power Steering Id:
+            </div>
+            <div class="col-md-4">
+                @Model.PowerSteeringId
+            </div>
+        </div>
+    }
+
+    @if (Model.Questions.Any())
+	{
+        <hr />
+        <div class="alert alert-warning mt-3">
+            <strong>Note: </strong> Fields marked with an asterisk (*) are required to be answered <strong>Yes</strong> before being submitted for approval.
+        </div>
+    }
+    <div id="questions mt-3 bm-3">
+        @{ var questionIndex = 0; }
+        @foreach (var question in Model.Questions)
+        {
+            @Html.EditorFor(x => question, new { index = questionIndex })
+            questionIndex++;
+        }
+    </div>
+    
+    <div class="mt-3 mb-3">
+        <label for="AdditionalComments" class="form-label">Additional Comments</label>
+        <textarea name="AdditionalComments" id="AdditionalComments" class="form-control" rows="4">@Model.AdditionalComments</textarea>
+    </div>
+
+    <h3 class="h5 header-underline">Gate Approval</h3>
+    <p>@Html.Raw(Model.GateReviewDescription)</p>
+
+    @{ var approverIndex = 0; }
+    <div class="row">
+        @foreach (var approver in Model.Approvers)
+        {
+            @Html.EditorFor(x => approver, new { index = approverIndex, status = Model.Status })
+            approverIndex++;
+        }
+    </div>
+
+    <hr class="mt-5" />
+
+    <div class="mt-2" id="feedbackMsg"></div>
+    
+    <div class="d-flex mt-3" style="gap: 10px;">
+        @if (Model.Status == StatusType.New || Model.Status == StatusType.InProgress)
+        {
+            <button type="button" class="btn btn-success me-auto" id="btnWaitingApproval"><i class="fas fa-thumbs-up"></i> Save &amp; Submit for Approval</button>
+        }
+        @if (Model.Status == StatusType.WaitingApproval)
+        {
+            <button type="button" class="btn btn-warning me-auto" id="btnInProgress"><i class="fas fa-rotate-left"></i> Undo Approval Submission</button>
+        }
+        @if (Model.Status == StatusType.Approved)
+        {
+            <button type="button" class="btn btn-danger me-auto" id="btnReject"><i class="fas fa-ban"></i> Reject &amp; Request Corrections</button>
+        }
+
+        <a class="btn btn-link ms-auto" asp-area="" asp-controller="Project" asp-action="Index" asp-route-id="@Model.DemandRequestId">Cancel</a>
+        <button type="submit" class="btn btn-primary" id="btnSave">Save</button>
+    </div>
+
+</form>

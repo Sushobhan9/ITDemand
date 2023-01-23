@@ -12,6 +12,7 @@ namespace ItDemand.Web.ViewModels
 		public string Email { get; set; } = string.Empty;
 
 		public int SecurityRole { get; set; } = (int)Domain.Enums.SecurityRole.User;
+        public bool IsActive { get; set; }
 
         public static UserViewModel Default { get; } = new UserViewModel { DisplayName = "Unknown" };
 

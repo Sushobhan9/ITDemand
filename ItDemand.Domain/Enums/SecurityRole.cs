@@ -10,5 +10,6 @@
         Architecture = 16,
         Security = 32,
         Consulting = 64,
+        ItHead = 128
     }
 }

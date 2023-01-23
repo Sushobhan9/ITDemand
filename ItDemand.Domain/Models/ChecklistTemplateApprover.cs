@@ -11,7 +11,7 @@ namespace ItDemand.Domain.Models
         [ForeignKey("ChecklistTemplateId")]
         public virtual ChecklistTemplate ChecklistTemplate { get; set; } = null!;
 
-        public ApproverRole Role { get; set; } // when approver type is drop-down will list out those in user table with matching security role
+        public SecurityRole Role { get; set; } // when approver type is drop-down role will determine which users appear based on their User Security Role
         public ApproverType Type { get; set; }
         public bool Required { get; set; }
         public int? SortIndex { get; set; }    

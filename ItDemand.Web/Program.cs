@@ -41,7 +41,7 @@ if (app.Environment.IsDevelopment())
 	{
 		using var scope = scopedFactory.CreateScope();
 		var service = scope.ServiceProvider.GetService<ItDemandContext>();
-		if (service != null) service.Seed();
+		service?.Seed();
 	}
 }
 

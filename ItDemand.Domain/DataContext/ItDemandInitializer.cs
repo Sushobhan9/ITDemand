@@ -803,39 +803,39 @@ namespace ItDemand.Domain.DataContext
 			{
 				var users = new List<User>
 				{
-					new User { Id = 1, DisplayName = "Richard Dillon", UserName = @"MUCLVAD1\rd028u", Email = "Richard.Dillon@linde.com", Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.Admin },
-					new User { Id = 2, DisplayName = "Darren Williams", UserName = @"LINDE\UK0C0B", Email = "Darren.Williams@linde.com", Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.Pmo },
-					new User { Id = 3, DisplayName = "Nelson Do Rego", UserName = @"LINDE\UK0C09", Email = "Nelson.DoRego@boc.com", Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.Pmo },
-					new User { Id = 4, DisplayName = "Lisa Korn", @UserName = @"LINDE\f4gz08", Email = "Lisa.Korn@linde.com", Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User },
-					new User { Id = 5, DisplayName = "Geoffrey Munch", @UserName = @"LINDE\f8kx29", Email = "Geoffrey.Munch@linde.com", Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.Pmo },
-					new User { Id = 6, DisplayName = "Janet Wright", UserName = @"LINDE\UK0CB7", Email = "Janet.Wright@linde.com", Created = DateTimeOffset.Now },
-					new User { Id = 7, DisplayName = @"Jason O'Brien", UserName = @"LINDE\SP01B8", Email = @"Jason.O'Brien@boc.com", Created = DateTimeOffset.Now },
-					new User { Id = 8, DisplayName = "Tracy Zhang", UserName = @"LINDE\CN02FD", Email = "Tracy.Zhang@linde.com", Created = DateTimeOffset.Now },
-					new User { Id = 9, DisplayName = "Youngsam Yu", UserName = @"LINDE\e6uz78", Email = "Youngsam.Yu@linde.com", Created = DateTimeOffset.Now },
-					new User { Id = 10, DisplayName = "Sujoy Sen", UserName = @"LINDE\IN0909", Email = "Sujoy.Sen@linde.com", Created = DateTimeOffset.Now },
-					new User { Id = 11, DisplayName = "Danny Perri", UserName = @"LINDE\DE1CB4", Email = "Danny.Perri@linde.com", Created = DateTimeOffset.Now },
-					new User { Id = 12, DisplayName = "Sandy Morris", UserName = @"LINDE\ZA0431", Email = "Sandy.Morris@linde.com", Created = DateTimeOffset.Now },
-					new User { Id = 13, DisplayName = "Oliver Breitbach", UserName = @"LINDE\DE02C3", Email = "Oliver.Breitbach@linde.com", Created = DateTimeOffset.Now },
-					new User { Id = 14, DisplayName = "Craig Batey", UserName = @"LINDE\UK0A9F", Email = "Craig.Batey@linde.com", Created = DateTimeOffset.Now },
-					new User { Id = 15, DisplayName = "Jean-Luc Darre", UserName = @"LINDE\FR0011", Email = "Jean-Luc.Darre@linde.com", Created = DateTimeOffset.Now },
-					new User { Id = 16, DisplayName = "Dulce Borjas", UserName = @"LINDE\b9dd40", Email = "Dulce.Borjas@linde.com", Created = DateTimeOffset.Now },
-					new User { Id = 17, DisplayName = "George Pun", UserName = @"LINDE\d4yk49", Email = "george.pun@linde.com", Created = DateTimeOffset.Now },
-					new User { Id = 18, DisplayName = "Claudia Silveira", UserName = @"LINDE\c6ol39", Email = "claudia.silveira@linde.com", Created = DateTimeOffset.Now },
-					new User { Id = 19, DisplayName = "Martin Vega", UserName = @"LINDE\d4pg03", Email = "Martin.Vega@linde.com", Created = DateTimeOffset.Now },
-					new User { Id = 20, DisplayName = "Michael Kurtz", UserName = @"LINDE\DE2007", Email = "michael.kurtz@linde.com", Created = DateTimeOffset.Now },
-					new User { Id = 21, DisplayName = "Martin Mossakowski", UserName = @"LINDE\a4iz37", Email = "Martin.Mossakowski@linde.com", Created = DateTimeOffset.Now },
-					new User { Id = 22, DisplayName = "Sebastian Mahler", UserName = @"LINDE\DEC138", Email = "Sebastian.Mahler@linde.com", Created = DateTimeOffset.Now },
-					new User { Id = 23, DisplayName = "Brenda Silvestro", UserName = @"LINDE\a0it96", Email = "Brenda.Silvestro@linde.com", Created = DateTimeOffset.Now },
-					new User { Id = 24, DisplayName = "Richard Wilkie", UserName = @"LINDE\f8ml00", Email = "Richard.Wilkie@nuco2.com", Created = DateTimeOffset.Now },
-					new User { Id = 25, DisplayName = "Dena Stirn", UserName = @"LINDE\b0vy55", Email = "Dena.Stirn@linde.com", Created = DateTimeOffset.Now },
-					new User { Id = 26, DisplayName = "Pranay Shah", UserName = @"LINDE\a0nc97", Email = "Pranay.Shah@linde.com", Created = DateTimeOffset.Now },
-					new User { Id = 27, DisplayName = "Peter Casazza", UserName = @"LINDE\e2cx99", Email = "Peter.Casazza@linde.com", Created = DateTimeOffset.Now },
-					new User { Id = 28, DisplayName = "Neil Kitchen", UserName = @"LINDE\UK02BC", Email = "Neil.Kitchen@linde.com", Created = DateTimeOffset.Now },
-			        new User { Id = 29, DisplayName = "Thomas Steinich", UserName = @"LINDE\DE027C", Email = "Thomas.Steinich@linde.com", Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.Architecture },
-                    new User { Id = 30, DisplayName = "Armin Kress", UserName = @"LINDE\DE228D", Email = "armin.kress@linde.com", Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.Architecture },
-                    new User { Id = 31, DisplayName = "Dave Hodson", UserName = @"LINDE\UK02B0", Email = "David.Hodson@linde.com", Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.Security },
-                    new User { Id = 32, DisplayName = "Tom Jones", UserName = @"LINDE\UK09C3", Email = "Tom.Jones@linde.com", Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.Consulting },
-			        //new User { Id = 33, DisplayName = "", UserName = @"", Email = "", Created = DateTimeOffset.Now },
+					new User { Id = 1, DisplayName = "Richard Dillon", UserName = @"MUCLVAD1\rd028u", Email = "Richard.Dillon@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.Admin },
+					new User { Id = 2, DisplayName = "Darren Williams", UserName = @"LINDE\UK0C0B", Email = "Darren.Williams@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.Pmo },
+					new User { Id = 3, DisplayName = "Nelson Do Rego", UserName = @"LINDE\UK0C09", Email = "Nelson.DoRego@boc.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.Pmo },
+					new User { Id = 4, DisplayName = "Lisa Korn", @UserName = @"LINDE\f4gz08", Email = "Lisa.Korn@linde.com", IsActive = false, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User },
+					new User { Id = 5, DisplayName = "Geoffrey Munch", @UserName = @"LINDE\f8kx29", Email = "Geoffrey.Munch@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.Pmo },
+					new User { Id = 6, DisplayName = "Janet Wright", UserName = @"LINDE\UK0CB7", Email = "Janet.Wright@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.Pmo },
+					new User { Id = 7, DisplayName = @"Jason O'Brien", UserName = @"LINDE\SP01B8", Email = @"Jason.O'Brien@boc.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.ItHead },
+					new User { Id = 8, DisplayName = "Tracy Zhang", UserName = @"LINDE\CN02FD", Email = "Tracy.Zhang@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.ItHead },
+					new User { Id = 9, DisplayName = "Youngsam Yu", UserName = @"LINDE\e6uz78", Email = "Youngsam.Yu@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.ItHead },
+					new User { Id = 10, DisplayName = "Sujoy Sen", UserName = @"LINDE\IN0909", Email = "Sujoy.Sen@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.ItHead },
+					new User { Id = 11, DisplayName = "Danny Perri", UserName = @"LINDE\DE1CB4", Email = "Danny.Perri@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.ItHead },
+					new User { Id = 12, DisplayName = "Sandy Morris", UserName = @"LINDE\ZA0431", Email = "Sandy.Morris@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.ItHead },
+					new User { Id = 13, DisplayName = "Oliver Breitbach", UserName = @"LINDE\DE02C3", Email = "Oliver.Breitbach@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.ItHead },
+					new User { Id = 14, DisplayName = "Craig Batey", UserName = @"LINDE\UK0A9F", Email = "Craig.Batey@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.ItHead },
+					new User { Id = 15, DisplayName = "Jean-Luc Darre", UserName = @"LINDE\FR0011", Email = "Jean-Luc.Darre@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.ItHead },
+					new User { Id = 16, DisplayName = "Dulce Borjas", UserName = @"LINDE\b9dd40", Email = "Dulce.Borjas@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.ItHead },
+					new User { Id = 17, DisplayName = "George Pun", UserName = @"LINDE\d4yk49", Email = "george.pun@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.ItHead },
+					new User { Id = 18, DisplayName = "Claudia Silveira", UserName = @"LINDE\c6ol39", Email = "claudia.silveira@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.ItHead },
+					new User { Id = 19, DisplayName = "Martin Vega", UserName = @"LINDE\d4pg03", Email = "Martin.Vega@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.ItHead },
+					new User { Id = 20, DisplayName = "Michael Kurtz", UserName = @"LINDE\DE2007", Email = "michael.kurtz@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.ItHead },
+					new User { Id = 21, DisplayName = "Martin Mossakowski", UserName = @"LINDE\a4iz37", Email = "Martin.Mossakowski@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.ItHead },
+					new User { Id = 22, DisplayName = "Sebastian Mahler", UserName = @"LINDE\DEC138", Email = "Sebastian.Mahler@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.ItHead },
+					new User { Id = 23, DisplayName = "Brenda Silvestro", UserName = @"LINDE\a0it96", Email = "Brenda.Silvestro@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.ItHead },
+					new User { Id = 24, DisplayName = "Richard Wilkie", UserName = @"LINDE\f8ml00", Email = "Richard.Wilkie@nuco2.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.ItHead },
+					new User { Id = 25, DisplayName = "Dena Stirn", UserName = @"LINDE\b0vy55", Email = "Dena.Stirn@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.ItHead },
+					new User { Id = 26, DisplayName = "Pranay Shah", UserName = @"LINDE\a0nc97", Email = "Pranay.Shah@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.ItHead },
+					new User { Id = 27, DisplayName = "Peter Casazza", UserName = @"LINDE\e2cx99", Email = "Peter.Casazza@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.ItHead },
+					new User { Id = 28, DisplayName = "Neil Kitchen", UserName = @"LINDE\UK02BC", Email = "Neil.Kitchen@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.ItHead },
+			        new User { Id = 29, DisplayName = "Thomas Steinich", UserName = @"LINDE\DE027C", Email = "Thomas.Steinich@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.Architecture },
+                    new User { Id = 30, DisplayName = "Armin Kress", UserName = @"LINDE\DE228D", Email = "armin.kress@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.Architecture },
+                    new User { Id = 31, DisplayName = "Dave Hodson", UserName = @"LINDE\UK02B0", Email = "David.Hodson@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.Security },
+                    new User { Id = 32, DisplayName = "Tom Jones", UserName = @"LINDE\UK09C3", Email = "Tom.Jones@linde.com", IsActive = true, Created = DateTimeOffset.Now, SecurityRole = SecurityRole.User | SecurityRole.Consulting },
+			        //new User { Id = 33, DisplayName = "", UserName = @"", Email = "", IsActive = true, Created = DateTimeOffset.Now },
 
 			        //new User { Id = , DisplayName = "", UserName = @"", Email = "" },
 			    };
@@ -1149,7 +1149,7 @@ namespace ItDemand.Domain.DataContext
         {
             Name = "Demand Review Gate 1",
             GateReviewDescription =
-                "ToDo: Add a Gate Review Description. Are there any instructions we would like to put here explaining what this checklist is or conditions for approving it?",
+                "Demand Request has been reviewed by PMO and assigned the correct Project Execution Workflow.",
             Questions = new[]
             {
                 CreateQuestion("1.1", "Additional Scrutiny?", QuestionType.MultiSelect, "", "Architecture,Security,Other"),
@@ -1166,7 +1166,7 @@ namespace ItDemand.Domain.DataContext
                 CreateQuestion("1.12", "Security Review Comments", QuestionType.MultilineText)
             },
             Approvers = new[] {
-                new ChecklistTemplateApprover { SortIndex = 0, Role = ApproverRole.ItsPmo, Type = ApproverType.Dropdown, Required = true }
+                new ChecklistTemplateApprover { SortIndex = 0, Role = SecurityRole.Pmo, Type = ApproverType.Dropdown, Required = true }
             }
         };
 
@@ -1174,10 +1174,10 @@ namespace ItDemand.Domain.DataContext
         {
             Name = "IT Head Approval",
             GateReviewDescription =
-                "ToDo: Add a Gate Review Description. Are there any instructions we would like to put here explaining what this checklist is or conditions for approving it?",
+                "The IT Director is confirming that the Demand is in line with business priorities and that the requested funding and local resources are available.",
             //Questions = new[] { },
             Approvers = new[] {
-                new ChecklistTemplateApprover { SortIndex = 0, Role = ApproverRole.ItsHead, Type = ApproverType.Dropdown, Required = true }
+                new ChecklistTemplateApprover { SortIndex = 0, Role = SecurityRole.ItHead, Type = ApproverType.Dropdown, Required = true }
             }
         };
 
@@ -1192,7 +1192,7 @@ namespace ItDemand.Domain.DataContext
             //    CreateQuestion("2.1.1", "Any questions we want to have answered for this checklist?")
             //},
             Approvers = new[] {
-                new ChecklistTemplateApprover { SortIndex = 0, Role = ApproverRole.Gbc, Type = ApproverType.Dropdown, Required = true }
+                new ChecklistTemplateApprover { SortIndex = 0, Role = SecurityRole.Consulting, Type = ApproverType.Dropdown, Required = true }
             }
         };
 
@@ -1200,10 +1200,10 @@ namespace ItDemand.Domain.DataContext
         {
             Name = "IT Head Initial Review",
             GateReviewDescription =
-                "ToDo: Add a Gate Review Description. Are there any instructions we would like to put here explaining what this checklist is or conditions for approving it?",
+                "The IT Director is confirming that the Demand is in line with business priorities and that the requested funding and local resources are available.",
             //Questions = new[] { },
             Approvers = new[] {
-                new ChecklistTemplateApprover { SortIndex = 0, Role = ApproverRole.ItsHead, Type = ApproverType.Dropdown, Required = true }
+                new ChecklistTemplateApprover { SortIndex = 0, Role = SecurityRole.ItHead, Type = ApproverType.Dropdown, Required = true }
             }
         };
 
@@ -1211,14 +1211,14 @@ namespace ItDemand.Domain.DataContext
         {
             Name = "Solution Design",
             GateReviewDescription =
-                "ToDo: Add a Gate Review Description. Are there any instructions we would like to put here explaining what this checklist is or conditions for approving it?",
+                "Design of solution to meet the Demand Request has been completed.",
             Questions = new[]
             {
                 CreateQuestion("2.1", "Solution Design Document completed", QuestionType.YesNo),
                 CreateQuestion("2.2", "Business/User Requirements document completed", QuestionType.YesNo)
             },
             Approvers = new[] {
-                new ChecklistTemplateApprover { SortIndex = 0, Role = ApproverRole.ProjectManager, Type = ApproverType.UserPicker, Required = true }
+                new ChecklistTemplateApprover { SortIndex = 0, Role = SecurityRole.User, Type = ApproverType.UserPicker, Required = true }
             }
         };
 
@@ -1226,14 +1226,14 @@ namespace ItDemand.Domain.DataContext
         {
             Name = "Security and Compliance Review",
             GateReviewDescription =
-                "ToDo: Add a Gate Review Description. Are there any instructions we would like to put here explaining what this checklist is or conditions for approving it?",
+                "Security and Compliance Review of Demand Request has been completed.",
             //Questions = new[]
             //{
             //    CreateQuestion("1.1", "Section Header Example", QuestionType.Header ),
             //    CreateQuestion("1.1.1", "Any questions we want to have answered for this checklist?")
             //},
             Approvers = new[] {
-                new ChecklistTemplateApprover { SortIndex = 0, Role = ApproverRole.RiskCompliance, Type = ApproverType.Dropdown, Required = true }
+                new ChecklistTemplateApprover { SortIndex = 0, Role = SecurityRole.Security, Type = ApproverType.Dropdown, Required = true }
             }
         };
 
@@ -1241,13 +1241,13 @@ namespace ItDemand.Domain.DataContext
         {
             Name = "Architecture Board Review",
             GateReviewDescription =
-                "ToDo: Add a Gate Review Description. Are there any instructions we would like to put here explaining what this checklist is or conditions for approving it?",
+                "Architecture review complete and approves of solution designed to meet the Demand Request.",
             Questions = new[]
             {
                 CreateQuestion("1.1", "Architecture Board Outcome", QuestionType.MultilineText),
             },
             Approvers = new[] {
-                new ChecklistTemplateApprover { SortIndex = 0, Role = ApproverRole.ArchitectureTeam, Type = ApproverType.Dropdown, Required = true }
+                new ChecklistTemplateApprover { SortIndex = 0, Role = SecurityRole.Architecture, Type = ApproverType.Dropdown, Required = true }
             }
         };
 
@@ -1255,14 +1255,14 @@ namespace ItDemand.Domain.DataContext
         {
             Name = "Demand Review Gate 2",
             GateReviewDescription =
-                "ToDo: Add a Gate Review Description. Are there any instructions we would like to put here explaining what this checklist is or conditions for approving it?",
+                "Demand Request has been reviewed by PMO.",
             //Questions = new[]
             //{
             //    CreateQuestion("1.1", "Section Header Example", QuestionType.Header ),
             //    CreateQuestion("1.1.1", "Any questions we want to have answered for this checklist?")
             //},
             Approvers = new[] {
-                new ChecklistTemplateApprover { SortIndex = 0, Role = ApproverRole.ItsPmo, Type = ApproverType.Dropdown, Required = true }
+                new ChecklistTemplateApprover { SortIndex = 0, Role = SecurityRole.Pmo, Type = ApproverType.Dropdown, Required = true }
             }
         };
 
@@ -1270,7 +1270,7 @@ namespace ItDemand.Domain.DataContext
         {
             Name = "Gate 3 Plan Checklist",
             GateReviewDescription =
-                "Are there any instructions we would like to put here explaining what this checklist is or conditions for approving it?",
+                "Gate 3 Project Plan has been reviewed and approved.",
             Questions = new[]
             {
                 CreateQuestion("1.1", "Project Charter"),
@@ -1286,7 +1286,7 @@ namespace ItDemand.Domain.DataContext
                 CreateQuestion("1.11", "Steering Committee Update")
             },
             Approvers = new[] {
-                new ChecklistTemplateApprover { SortIndex = 0, Role = ApproverRole.ItsPmo, Type = ApproverType.Dropdown, Required = true }
+                new ChecklistTemplateApprover { SortIndex = 0, Role = SecurityRole.Pmo, Type = ApproverType.Dropdown, Required = true }
             }
         };
 
@@ -1294,7 +1294,7 @@ namespace ItDemand.Domain.DataContext
         {
             Name = "Gate 4 Execute Checklist",
             GateReviewDescription =
-                "Are there any instructions we would like to put here explaining what this checklist is or conditions for approving it?",
+                "Gate 4 Execute has been reviewed and approved.",
             Questions = new[]
             {
                 CreateQuestion("1.1", "Business Service Level Description"),
@@ -1304,7 +1304,7 @@ namespace ItDemand.Domain.DataContext
                 CreateQuestion("1.5", "Steering Committee Update")
             },
             Approvers = new[] {
-                new ChecklistTemplateApprover { SortIndex = 0, Role = ApproverRole.ItsPmo, Type = ApproverType.Dropdown, Required = true }
+                new ChecklistTemplateApprover { SortIndex = 0, Role = SecurityRole.Pmo, Type = ApproverType.Dropdown, Required = true }
             }
         };
 
@@ -1312,7 +1312,7 @@ namespace ItDemand.Domain.DataContext
         {
             Name = "Gate 5 Pre-Go Live Checklist",
             GateReviewDescription =
-                "Are there any instructions we would like to put here explaining what this checklist is or conditions for approving it?",
+                "Gate 5 Pre-Go Live has been reviewed and approved.",
             Questions = new[]
             {
                 CreateQuestion("1.1", "Product Acceptance Checklist"),
@@ -1320,7 +1320,7 @@ namespace ItDemand.Domain.DataContext
                 CreateQuestion("1.3", "Steering Committee Update")
             },
             Approvers = new[] {
-                new ChecklistTemplateApprover { SortIndex = 0, Role = ApproverRole.ItsPmo, Type = ApproverType.Dropdown, Required = true }
+                new ChecklistTemplateApprover { SortIndex = 0, Role = SecurityRole.Pmo, Type = ApproverType.Dropdown, Required = true }
             }
         };
 
@@ -1328,7 +1328,7 @@ namespace ItDemand.Domain.DataContext
         {
             Name = "Gate 6 Go Live Checklist",
             GateReviewDescription =
-                "Are there any instructions we would like to put here explaining what this checklist is or conditions for approving it?",
+                "Gate 6 Go Live has been reviewed and approved.",
             Questions = new[]
             {
                 CreateQuestion("1.1", "Go Live Executed"),
@@ -1336,7 +1336,7 @@ namespace ItDemand.Domain.DataContext
                 CreateQuestion("1.3", "Final Steering Committee Update")
             },
             Approvers = new[] {
-                new ChecklistTemplateApprover { SortIndex = 0, Role = ApproverRole.ItsPmo, Type = ApproverType.Dropdown, Required = true }
+                new ChecklistTemplateApprover { SortIndex = 0, Role = SecurityRole.Pmo, Type = ApproverType.Dropdown, Required = true }
             }
         };
 
@@ -1344,14 +1344,14 @@ namespace ItDemand.Domain.DataContext
         {
             Name = "Gate 7 Closeout Checklist",
             GateReviewDescription =
-                "Review and approve final closeout of this project.",
+                "Project Plan has been completed and can be closed out.",
             Questions = new[]
             {
                 CreateQuestion("1.1", "HyperCare End"),
                 CreateQuestion("1.2", "Post Implementation Review")
             },
             Approvers = new[] {
-                new ChecklistTemplateApprover{ SortIndex = 0, Role = ApproverRole.ItsPmo, Type = ApproverType.Dropdown, Required = true }
+                new ChecklistTemplateApprover{ SortIndex = 0, Role = SecurityRole.Pmo, Type = ApproverType.Dropdown, Required = true }
             }
         };
         #endregion

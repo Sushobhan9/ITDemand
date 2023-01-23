@@ -14,15 +14,15 @@
             Checklists = Array.Empty<ChecklistViewModel>()
         };
 
-        //public IEnumerable<GateViewModel> Gates
-        //{
-        //    get
-        //    {
-        //        return Checklists
-        //            .OrderBy(x => x.WorkflowItem.SequenceNumber)
-        //            .GroupBy(x => new { x.WorkflowItem })
-        //            .Select(x => new GateViewModel(x.Key.WorkflowItem, x.ToList()));
-        //    }
-        //}
+        public IEnumerable<GateViewModel> Gates
+        {
+            get
+            {
+                return Checklists
+                    .OrderBy(x => x.WorkflowItem.SequenceNumber)
+                    .GroupBy(x => new { x.WorkflowItem })
+                    .Select(x => new GateViewModel(x.Key.WorkflowItem, x.ToList()));
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ItDemand.Domain.Enums;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ItDemand.Web.ViewModels
 {
@@ -6,7 +7,7 @@ namespace ItDemand.Web.ViewModels
     {
         public int Id { get; set; }
         public int ChecklistId { get; set; }
-        public ApproverRole Role { get; set; }
+        public SecurityRole Role { get; set; }
         public ApproverType Type { get; set; }
         public bool Required { get; set; }
         public int? SortIndex { get; set; }
@@ -15,5 +16,9 @@ namespace ItDemand.Web.ViewModels
         public UserViewModel? Approver { get; set; }
 
         public DateTime? ApprovalDate { get; set; }
+
+        public IEnumerable<SelectListItem> ApproverList { get; set; } = Enumerable.Empty<SelectListItem>();
+
+        public UserViewModel CurrentUser { get; set; } = null!; // we need the current user to check to see if they are the same as the approver selected
     }
 }

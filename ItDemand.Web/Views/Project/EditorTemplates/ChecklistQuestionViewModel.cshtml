@@ -1,0 +1,137 @@
+﻿@using ItDemand.Domain.Enums;
+@model ChecklistQuestionViewModel
+
+@functions {
+    public static string FormatDateMMM(DateTimeOffset? date)
+    {
+        const string format = "MMM dd yyyy";
+        return date.HasValue ? date.Value.ToString(format) : string.Empty;
+    }
+}
+
+@{
+	var index = ViewData["index"];
+	var indent = ((@Model.Level - 1) * 10) + "px";
+}
+
+<div class="question mb-4" data-id="@index">
+	<div class="row">
+		<input type="hidden" name="Questions[@index].Id" value="@Model.Id" />
+		<input type="hidden" name="Questions[@index].Text" value="@Model.Text" />
+		
+		<div class="col-sm-1">
+			<span class="spacer" style="padding-left: @indent; margin-left: -10px;">
+				@Model.Path
+				@if (!string.IsNullOrWhiteSpace(Model.AcceptedAnswers))
+				{
+					<i class="fa fa-asterisk"></i>
+				}
+			</span>
+		</div>
+
+		<div class="col-sm-7">
+			<div class="question-text">@Model.Text</div>
+			<div class="m-t text-muted">@Html.Raw(Model.HelpText)</div>
+		</div>
+
+		@if (Model.QuestionType == QuestionType.Header)
+		{
+			<div class="col-sm-4"></div>
+		}
+		else if (Model.QuestionType == QuestionType.YesNoNa || Model.QuestionType == QuestionType.YesNo)
+		{
+			<div class="col-sm-4">
+				<div class="form-check">
+					<input type="radio" class="form-check-input" value="Yes" name="Questions[@index].Answer" checked="@((Model.Answer ?? "").Equals("Yes"))">
+					<label class="form-check-label">Yes</label>
+				</div>
+				<div class="form-check">
+					<input type="radio" class="form-check-input" value="No" name="Questions[@index].Answer" checked="@((Model.Answer ?? "").Equals("No"))">
+					<label class="form-check-label">No</label>
+				</div>
+				@if (Model.QuestionType == QuestionType.YesNoNa)
+				{
+					<div class="form-check">
+								<input type="radio" class="form-check-input" value="NA" name="Questions[@index].Answer" checked="@((Model.Answer ?? "").Equals("NA"))">
+						<label class="form-check-label">N/A</label>
+					</div>
+				}
+			</div>
+		}
+		else if (Model.QuestionType == QuestionType.Date)
+		{
+			<div class="col-sm-4">
+				<div class="input-group">
+						<input type="text" name="Questions[@index].Answer" class="form-control datepicker" value="@FormatDateMMM(string.IsNullOrEmpty(Model.Answer) ? (DateTime?)null : DateTime.Parse(Model.Answer))">
+                    <span class="input-group-text cursor-pointer"><i class="fa fa-calendar"></i></span>
+                </div>
+			</div>
+		}
+		else if (Model.QuestionType == QuestionType.UserSelect)
+		{
+			<div class="col-sm-4">
+				<div class="input-group">
+						<input type="text" name="Questions[@index].Answer" class="form-control" value="@Model.Answer" readonly>
+					<div class="input-group-overlay cursor-pointer"><i class="fa fa-times"></i></div>
+					<span class="input-group-text cursor-pointer"><i class="fa fa-user"></i></span>
+				</div>
+			</div>
+		}
+		else if (Model.QuestionType == QuestionType.MultilineText)
+		{
+			<div class="col-sm-4">
+				<textarea name="Questions[@index].Answer" class="form-control" rows="3">@Model.Answer</textarea>
+			</div>
+		}
+		else if (Model.QuestionType == QuestionType.Text)
+		{
+			<div class="col-sm-4">
+				<input type="text" name="answer-@index" value="@Model.Answer" />
+			</div>
+		}
+		else if (Model.QuestionType == QuestionType.CustomChoice)
+		{
+			<div class="col-sm-4">
+				@foreach (var choice in Model.CustomChoices)
+				{
+					<div class="form-check">
+						<input type="radio" class="form-check-input" value="@choice.Value" name="Questions[@index].Answer" checked="@((choice.Value) == (Model.Answer))">
+						<label class="form-check-label">@choice.Text</label>
+					</div>
+				}
+			</div>
+		}
+		else if (Model.QuestionType == QuestionType.MultiSelect)
+		{
+			<div class="col-sm-4">
+				@foreach (var choice in Model.CustomChoices)
+				{
+					<div class="form-check">
+						<input type="checkbox" class="form-check-input" value="@choice.Value" name="Questions[@index].MultiSelectAnswers" checked="@(Model.MultiSelectAnswers.Contains(choice.Value))">
+						<label class="form-check-label">@choice.Text</label>
+					</div>
+				}
+			</div>
+		}
+		else
+		{
+			<div class="col-sm-4">
+				<textarea name="answer-@index" rows="12">@Model.Answer</textarea>
+			</div>
+		}
+	</div>
+
+	@if (Model.QuestionType == QuestionType.YesNoNa || 
+		 Model.QuestionType == QuestionType.YesNo || 
+		 Model.QuestionType == QuestionType.CustomChoice ||
+		 Model.QuestionType == QuestionType.MultiSelect)
+	{
+			<div class="row mt-2 pb-2">
+			<div class="col-sm-12">
+				<label class="form-label">Comments</label>
+				<textarea name="Questions[@index].Comments" class="form-control" rows="3">@Model.Comments</textarea>
+			</div>
+		</div>
+	}
+
+</div>

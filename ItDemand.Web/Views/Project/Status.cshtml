@@ -1,0 +1,82 @@
+﻿@using ItDemand.Domain.Enums;
+@using Microsoft.AspNetCore.Html;
+@model ProjectViewModel
+
+@functions {
+    public static HtmlString GetStatusIcon(StatusType status)
+    {
+        switch (status)
+        {
+            case StatusType.Approved:
+                return new HtmlString("<i class=\"fas fa-flag status-approved\" title=\"Approved\"></i>");
+            case StatusType.WaitingApproval:
+                return new HtmlString("<i class=\"fas fa-flag status-waiting-approval\" title=\"Waiting Approval\"></i>");
+            case StatusType.InProgress:
+                return new HtmlString("<i class=\"fas fa-flag status-in-progress\" title=\"In Progress\"></i>");
+            case StatusType.Rejected:
+                return new HtmlString("<i class=\"fas fa-flag status-rejected\" title=\"Rejected\"></i>");
+            default:
+                return new HtmlString("<i class=\"fas fa-flag status-not-started\" title=\"Not Started Yet\"></i>");
+        }
+    }
+
+    public static HtmlString GetStatusText(StatusType status)
+    {
+        switch (status)
+        {
+            case StatusType.Approved:
+                return new HtmlString("<span>approved.</span>");
+            case StatusType.WaitingApproval:
+                return new HtmlString("<span>waiting for approval.</span>");
+            case StatusType.InProgress:
+                return new HtmlString("<span>currently in progress.</span>");
+            case StatusType.Rejected:
+                return new HtmlString("<span>sent back for review.</span>");
+            default:
+                return new HtmlString("<span>has not been started yet.</span>");
+        }
+    }
+}
+
+<h1 class="h4">Project Status</h1>
+<div class="card card-body bg-light">
+    <h2 class="h5"><i class="fas fa-diagram-project"></i> Stage Gate Review Process</h2>
+    <p class="text-muted small"><em>Click on a shape below to see more information...</em></p>
+    <div class="card card-body bg-light">
+        <div id="diagram"></div>
+    </div>
+    
+</div>
+
+<div class="card card-body bg-light mt-3">
+    <h2 class="h5"><i class="fas fa-history"></i> Workflow History</h2>
+    <ul class="navtree" id="history">
+        @foreach (var gate in Model.Gates)
+        {
+            <li>
+                <span>
+                    <i class="far fa-square-minus"></i>
+                    @if (gate.IsComplete)
+                    {
+                        <span class="fa fa-check text-success"></span>
+                    }
+                    <strong><span>Step @gate.Number</span></strong> - <span>@gate.Name</span>
+                    <span class="text-muted small" style="margin-left:50px">@string.Format("{0:P0} Complete", gate.PercentComplete)</span>
+                </span>
+
+                @if (gate.Documents.Any())
+                {
+                    <ul>
+                        @foreach (var document in gate.Documents.OrderBy(x => x.SequenceNumber))
+                        {
+                            <li>
+                                @GetStatusIcon(document.Status) <span><strong>@document.Name</strong></span>
+                                @GetStatusText(document.Status)
+                            </li>
+                        }
+                    </ul>
+                }
+            </li>
+        }
+    </ul>
+</div>

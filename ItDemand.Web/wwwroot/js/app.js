@@ -56,30 +56,31 @@ App.Dialogs = {
          }
       };
    }()),
-   //messageBox: (function (msg) {
-   //   // uses partial _MessageModal.cshtml loaded in Layout.cshtml
-   //   let messageModal = new bootstrap.Modal(document.getElementById('message-dialog'), {
-   //      backdrop: 'static',
-   //      keyboard: false
-   //   });
+   messageBox: function (msg, callback) {
+      // uses partial _MessageModal.cshtml loaded in Layout.cshtml
+      let messageModal = new bootstrap.Modal(document.getElementById('message-dialog'), {
+         backdrop: 'static',
+         keyboard: false
+      });
 
-   //   document.getElementById('messageDialogContent').innerHTML = msg;
+      document.getElementById('messageDialogContent').innerHTML = msg;
 
-   //   const btnOk = document.getElementById('btnMessageOk');
+      const btnOk = document.getElementById('btnMessageOk');
 
-   //   function okButtonClick() {
-   //      close();
-   //   }
+      function okButtonClick() {
+         if (typeof callback === 'function') { callback(); }
+         close();
+      }
 
-   //   let close = function () {
-   //      btnOk.removeEventListener('click', okButtonClick);
-   //      messageModal.hide();
-   //   }
+      let close = function () {
+         btnOk.removeEventListener('click', okButtonClick);
+         messageModal.hide();
+      }
 
-   //   btnOk.addEventListener('click', okButtonClick);
+      btnOk.addEventListener('click', okButtonClick);
 
-   //   messageModal.show();
-   //}()),
+      messageModal.show();
+   },
    confirm: function (prompt, callback) {
       // uses partial _ConfirmModal.cshtml loaded in Layout.cshtml
       let confirmModal = new bootstrap.Modal(document.getElementById('confirm-dialog'), {

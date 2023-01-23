@@ -176,6 +176,7 @@ namespace ItDemand.Domain.Migrations
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SecurityRole = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
                 },

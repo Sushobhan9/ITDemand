@@ -1,0 +1,137 @@
+﻿ul.gateflow {
+	display: inline-block;
+	overflow-x: auto;
+	overflow-y: hidden;
+	height: 140px;
+	white-space: nowrap;
+	width: 100%;
+}
+
+ul.gateflow li {
+	display: inline-block;
+	list-style-type: none;
+}
+
+ul.gateflow div.workflow-item {
+	display: inline-block;
+	height: 100px;
+}
+
+ul.gateflow div.description {
+	position: relative;
+	color: darkgray;
+	text-align: center;
+	float: left;
+	font-size: 9pt;
+	top: 50%;
+	padding: 0 40px;
+	word-wrap: break-word;
+	white-space: pre-wrap;
+	-ms-transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+	transform: translateY(-50%);
+	z-index: 99;
+	width: 100%;
+}
+
+ul.gateflow li.process div.workflow-item {
+	width: 200px;
+}
+
+ul.gateflow li.terminator div.workflow-item {
+	width: 200px;
+}
+
+ul.gateflow li.decision div.workflow-item {
+	width: 240px;
+}
+
+ul.gateflow div.diamond {
+	margin-right: 120px;
+	height: 0;
+	border-right: 120px solid #e0e0e0;
+	border-top: 50px solid transparent;
+	border-bottom: 50px solid transparent;
+	position: relative;
+	color: #fff;
+}
+
+	ul.gateflow div.diamond:after {
+		content: '';
+		width: 0;
+		height: 0;
+		position: absolute;
+		right: -120px;
+		left: 120px;
+		top: -50px;
+		border-left: 120px solid #e0e0e0;
+		border-top: 50px solid transparent;
+		border-bottom: 50px solid transparent;
+	}
+
+ul.gateflow div.rectangle {
+	width: 200px;
+	height: 100px;
+	background: #e0e0e0;
+}
+
+ul.gateflow div.terminator {
+	width: 100px;
+	height: 100px;
+	background: #e0e0e0;
+	position: relative;
+	left: 50px;
+}
+
+	ul.gateflow div.terminator:before {
+		width: 100px;
+		height: 100px;
+		background: #e0e0e0;
+		-moz-border-radius: 50px;
+		-webkit-border-radius: 50px;
+		border-radius: 50px;
+		position: absolute;
+		content: '';
+		left: -45px;
+	}
+
+	ul.gateflow div.terminator:after {
+		width: 100px;
+		height: 100px;
+		background: #e0e0e0;
+		-moz-border-radius: 50px;
+		-webkit-border-radius: 50px;
+		border-radius: 50px;
+		position: absolute;
+		content: '';
+		left: 55px;
+	}
+
+ul.gateflow li.current div.description {
+	color: #fff;
+}
+
+ul.gateflow li.current div.diamond {
+	border-right-color: #389c20;
+}
+
+	ul.gateflow li.current div.diamond:after {
+		border-left-color: #389c20;
+	}
+
+ul.gateflow li.current div.rectangle {
+	background: #389c20;
+}
+
+ul.gateflow li.arrow {
+	color: #7e7f7d;
+	position: relative;
+	top: -46px;
+	margin: 0 10px;
+}
+
+ul.gateflow li.active div.description {
+	font-style: italic;
+	font-weight: bold;
+	color: #000;
+}

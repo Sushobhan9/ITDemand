@@ -1,0 +1,21 @@
+﻿@using ItDemand.Domain.Enums;
+@model ChecklistViewModel
+
+@if (Model.Status == StatusType.WaitingApproval)
+{
+    <div class="alert alert-info alert-sm" role="alert">
+        <i class="fa fa-circle-info"></i> This checklist is currently waiting approval.
+    </div>
+}
+else if (Model.Status == StatusType.Approved)
+{
+    <div class="alert alert-success alert-sm" role="alert">
+        <i class="fa fa-square-check"></i> This checklist has been approved.
+    </div>
+}
+else if (Model.Status == StatusType.Rejected)
+{
+    <div class="alert alert-danger alert-sm" role="alert">
+        <i class="fa fa-circle-xmark"></i> This checklist has been rejected.
+    </div>
+}

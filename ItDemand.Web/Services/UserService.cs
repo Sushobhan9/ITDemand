@@ -32,7 +32,14 @@ namespace ItDemand.Web.Services
 			return user;
 		}
 
-		public User? VerifyOrCreateUser(ActiveDirectoryUser? adUser)
+        public User? GetEmployeeById(int id)
+        {
+            var user = _db.Users
+                .SingleOrDefault(x => x.Id == id);
+            return user;
+        }
+
+        public User? VerifyOrCreateUser(ActiveDirectoryUser? adUser)
 		{
 			if (adUser == null) return null;
 			if (string.IsNullOrEmpty(adUser.UserName)) return null;

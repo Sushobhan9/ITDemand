@@ -2,6 +2,7 @@
 using ItDemand.Domain.Models;
 using ItDemand.Web.Models;
 using System.Net.Mail;
+using System.Text;
 
 namespace ItDemand.Web.Services
 {
@@ -144,6 +145,175 @@ namespace ItDemand.Web.Services
 
             SendMail(mailMessage);
         }
+
+        #region Checklist Approval Notifications
+        public void SendChecklistApprovalRequest(ChecklistApprovalNotificationModel model)
+        {
+            var mailMessage = new MailMessage();
+            mailMessage.IsBodyHtml = true;
+
+            var body = new StringBuilder();
+
+            body.AppendLine(
+                $@"<p>A <strong>{model.ChecklistTitle}</strong> checklist in the <a href=""{_baseUrl}"">IT Demand Management System</a> has been submitted for approval. Click the link below to review this checklist.</p>
+					<table>
+						<tbody>
+							<tr>
+								<td><strong>Checklist:</strong></td><td></td><td><a href=""{_baseUrl}{model.ChecklistRelativePath}"">{model.ChecklistTitle}</a></td>
+							</tr>
+							<tr>
+								<td><strong>Demand Id:</strong></td><td></td><td>Demand-{model.DemandId}</td>
+							</tr>
+							<tr>
+								<td><strong>Demand Name:</strong></td><td></td><td>{model.DemandName}</td>
+							</tr>
+						</tbody>
+					</table>"
+                );
+
+            body.AppendLine(
+                $@"<p>To Approve:
+						<ol>
+							<li>Click the <strong>Click to Sign</strong> button next to your name.</li>
+							<li>Ensure the date is correct in the date field below your approval box.</li>
+							<li>(Optionally) Add feedback or comments in the Approver Comments section.</li> 
+							<li>Click the <strong>Save</strong> button located at the bottom right of the form.</li>
+						</ol>
+					</p>
+					<p>To Reject & Request Corrections:
+						<ol>
+							<li>Add feedback or comments in the Approver Comments section.</li>
+							<li>Click the <strong>Reject & Request Corrections</strong> button on the bottom left of the page.</li>
+							<li>Checklist will be marked as Rejected & Requested Corrections.</li>
+							<li>An email will be sent to the submitter informing them of the request (including any comments made).</li>
+						</ol>
+					</p>"
+                );
+
+            body.AppendLine($@"<p>{Disclaimer}</p>");
+
+            mailMessage.Body = body.ToString();
+
+            mailMessage.Subject = $"[IT Demand System] - {model.ChecklistTitle} Approval Request (IT Demand-{model.DemandId})";
+
+            foreach (var approver in model.Approvers)
+            {
+                if (!string.IsNullOrEmpty(approver.Email))
+                {
+                    mailMessage.To.Add(new MailAddress(approver.Email, approver.DisplayName));
+                }
+            }
+
+            if (!string.IsNullOrEmpty(model.SentBy.Email))
+            {
+                mailMessage.CC.Add(new MailAddress(model.SentBy.Email, model.SentBy.DisplayName));
+            }
+
+            SendMail(mailMessage);
+        }
+
+        public void SendChecklistCorrectionsRequest(ChecklistApprovalNotificationModel model)
+        {
+            var mailMessage = new MailMessage();
+            mailMessage.IsBodyHtml = true;
+
+            var body = new StringBuilder();
+
+            body.AppendLine(
+                $@"<p>The following Checklist in the <a href=""{_baseUrl}"">IT Demand Management System</a> has been sent back with a request for corrections. Click the link below to review this checklist.</p>
+					<table>
+						<tbody>
+							<tr>
+								<td><strong>Checklist:</strong></td><td></td><td><a href=""{_baseUrl}{model.ChecklistRelativePath}"">{model.ChecklistTitle}</a></td>
+							</tr>
+							<tr>
+								<td><strong>Demand Id:</strong></td><td></td><td>Demand-{model.DemandId}</td>
+							</tr>
+							<tr>
+								<td><strong>Demand Name:</strong></td><td></td><td>{model.DemandName}</td>
+							</tr>
+						</tbody>
+					</table>"
+                );
+
+            body.AppendLine(
+                $@"<p style=""text-decoration: underline;"">Approver Comments</p><p>{(string.IsNullOrEmpty(model.Comments) ? "None." : model.Comments)}</p>"
+            );
+
+            body.AppendLine($@"<p>{Disclaimer}</p>");
+
+            mailMessage.Body = body.ToString();
+
+            mailMessage.Subject = $"[IT Demand System] - {model.ChecklistTitle} Corrections Requested (IT Demand-{model.DemandId})";
+
+            if (!string.IsNullOrEmpty(model.SentBy.Email))
+            {
+                mailMessage.CC.Add(new MailAddress(model.SentBy.Email, model.SentBy.DisplayName));
+            }
+
+            foreach (var approver in model.Approvers)
+            {
+                if (!string.IsNullOrEmpty(approver.Email))
+                {
+                    mailMessage.CC.Add(new MailAddress(approver.Email, approver.DisplayName));
+                }
+            }
+
+            SendMail(mailMessage);
+        }
+
+        public void SendChecklistApproved(ChecklistApprovalNotificationModel model)
+        {
+            var mailMessage = new MailMessage();
+            mailMessage.IsBodyHtml = true;
+
+            var body = new StringBuilder();
+
+            body.AppendLine(
+                $@"<p>The following Checklist in the <a href=""{_baseUrl}"">IT Demand Management System</a> has been approved. Click the link below to review this checklist.</p>
+					<table>
+						<tbody>
+							<tr>
+								<td><strong>Checklist:</strong></td><td></td><td><a href=""{_baseUrl}{model.ChecklistRelativePath}"">{model.ChecklistTitle}</a></td>
+							</tr>
+							<tr>
+								<td><strong>Demand Id:</strong></td><td></td><td>Demand-{model.DemandId}</td>
+							</tr>
+							<tr>
+								<td><strong>Demand Name:</strong></td><td></td><td>{model.DemandName}</td>
+							</tr>
+						</tbody>
+					</table>"
+                );
+
+            body.AppendLine(
+                $@"<p style=""text-decoration: underline;"">Approver Comments</p><p>{(string.IsNullOrEmpty(model.Comments) ? "None." : model.Comments)}</p>"
+            );
+
+            body.AppendLine($@"<p>{Disclaimer}</p>");
+
+            mailMessage.Body = body.ToString();
+
+            mailMessage.Subject = $"[IT Demand System] - {model.ChecklistTitle} Approved (IT Demand-{model.DemandId})";
+
+            if (!string.IsNullOrEmpty(model.SentBy.Email))
+            {
+                mailMessage.CC.Add(new MailAddress(model.SentBy.Email, model.SentBy.DisplayName));
+            }
+
+            foreach (var approver in model.Approvers)
+            {
+                if (!string.IsNullOrEmpty(approver.Email))
+                {
+                    mailMessage.CC.Add(new MailAddress(approver.Email, approver.DisplayName));
+                }
+            }
+
+            SendMail(mailMessage);
+        }
+
+
+        #endregion
 
         private void SendMail(MailMessage mailMessage)
         {

@@ -34,7 +34,8 @@ namespace ItDemand.Web.Controllers
 		{
 			var demandService = new DemandService(_log, _db, _mapper, this.GetUser());
 			var vm = demandService.GetDemandRequest(id);
-            return View(vm);
+            if (vm == null) return View();
+            return vm.ExecutionType == null ? View("DemandPage", vm) : PartialView("DemandRequestForm", vm);
 		}
 
         [HttpPost]

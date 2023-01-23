@@ -16,7 +16,7 @@ namespace ItDemand.Web.Services
             _log = log;
         }
 
-        public void CreateWorkItems(DemandRequest demand, bool itsCabReview = true)
+        public void CreateWorkItems(DemandRequest demand, bool itsCabReview = false)
         {
             // Find all the workflows that apply to this demand.
             var workflows = _db.Workflows
