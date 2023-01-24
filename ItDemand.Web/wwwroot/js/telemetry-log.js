@@ -1,4 +1,26 @@
-﻿$(document).ready(function () {
+﻿function renderDate(value) {
+	const monthShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+	if (value === null) return "";
+
+	const dt = new Date(value);
+	 
+	let hours = dt.getHours(); // 0 - 23
+	let minutes = dt.getMinutes(); // 0 - 59
+	let seconds = dt.getSeconds(); // 0 - 59
+
+	var ampm = hours >= 12 ? 'PM' : 'AM';
+	hours = hours % 12;
+	hours = hours ? hours : 12; // the hour '0' should be '12'
+
+	hours = hours < 10 ? '0' + hours : hours;
+	minutes = minutes < 10 ? '0' + minutes : minutes;
+	seconds = seconds < 10 ? '0' + seconds : seconds;
+
+	return dt.getDate() + " " + monthShortNames[dt.getMonth()] + " " + dt.getFullYear() + " " + hours + ":" + minutes + ":" + seconds + " " + ampm;
+}
+
+$(document).ready(function () {
 	$('#tblTelemetry').DataTable({
 		"processing": true,
 		"serverSide": true,
@@ -11,7 +33,7 @@
 		},
 		"columns": [
 			{ data: 'category' },
-			{ data: 'entryDate', "render": function (value) { return new Date(value.toString()); } },
+			{ data: 'entryDate', "render": function (value) { return renderDate(value); /*return new Date(value.toLocaleString());*/ } },
 			{ data: 'type' },
 			{
 				data: 'userDisplayName',

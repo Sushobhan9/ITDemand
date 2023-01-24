@@ -25,7 +25,7 @@
         <div class="row mt-2" id="requestCorrectionsCommentsRow">
             <div class="col">
                 <label class="form-label">Request Corrections Comments</label>
-                <textarea name="RequestCorrectionsComments" class="form-control" rows="5">@Model.RequestCorrectionsComments</textarea>
+                <textarea name="RequestCorrectionsComments" class="form-control pmo-only" rows="5">@Model.RequestCorrectionsComments</textarea>
             </div>
         </div>
         <div class="alert alert-info mt-3 mb-0" id="requestedCorrectionsAlert" role="alert"></div>
@@ -42,7 +42,7 @@
                 @foreach (var workflowType in Model.PmoReviewOptions)
                 {
                     <div class="form-check">
-                        <input type="radio" class="form-check-input pmo-only" value="@workflowType.Item1" name="ExecutionType" @((workflowType.Item1) == (Model.ExecutionType) ? "checked=\"checked\"" : "")>
+                        <input type="radio" class="form-check-input pmo-only" value="@workflowType.Item1" name="PmoReviewExecutionType" checked="@(workflowType.Item1 == Model.PmoReviewExecutionType)">
                         <label class="form-check-label">
                             @workflowType.Item2
                         </label>
@@ -53,7 +53,7 @@
         <div class="row mt-2">
             <div class="col">
                 <label class="form-label">Comments</label>
-                <textarea name="RequestCorrectionsComments" class="form-control" rows="5">@Model.RequestCorrectionsComments</textarea>
+                <textarea name="PmoReviewComments" class="form-control pmo-only" rows="5">@Model.PmoReviewComments</textarea>
             </div>
         </div>
     </div>
@@ -81,7 +81,7 @@
 				        data-bs-content="<dl><dt>Platform</dt><dd>A Linde governed software platform</dd><dt>Other - External service</dt><dd>Not a Linde governed solution</dd><dt>Other – Internal service</dt><dd>A Linde datacentre hosted solution</dd></dl>">
 			        </i>
                 </label>
-                <select asp-for="ProposedPlatformId" asp-items="Model.ItPlatforms" class="form-select">
+                <select asp-for="ProposedPlatformId" asp-items="Model.ItPlatforms" class="form-select gbc-only">
                     <option selected></option>
                 </select>
             </div>
@@ -106,13 +106,13 @@
                     <input type="hidden" name="AssignedSme.UserName" class="form-control" value="@(Model.AssignedSme?.UserName ?? string.Empty)">
                     <input type="hidden" name="AssignedSme.Email" class="form-control" value="@(Model.AssignedSme?.Email ?? string.Empty)">
                     <input type="text" name="AssignedSme.DisplayName" class="form-control" value="@(Model.AssignedSme?.DisplayName ?? string.Empty)" readonly>
-                    <div class="input-group-overlay cursor-pointer"><i class="fa fa-times"></i></div>
-                    <span class="input-group-text cursor-pointer"><i class="fa fa-user"></i></span>
+                    <div class="input-group-overlay assigned-sme cursor-pointer"><i class="fa fa-times"></i></div>
+                    <span class="input-group-text assigned-sme cursor-pointer"><i class="fa fa-user"></i></span>
                 </div>
             </div>
             <div class="col-md-4">
                 <label class="form-label">IT Segment</label>
-                <select asp-for="ItSegmentId" asp-items="Model.ItSegments" class="form-select">
+                <select asp-for="ItSegmentId" asp-items="Model.ItSegments" class="form-select gbc-only">
                     <option selected></option>
                 </select>
             </div>

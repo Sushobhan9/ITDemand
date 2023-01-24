@@ -43,12 +43,14 @@ $(document).on("click", "div.assigned-sme:has(i.fa-times)", clearPeoplePicker);
 
 $(document).off("click", "span.input-group-text:has(i.fa-user)");
 $(document).on("click", "span.input-group-text:has(i.fa-user):not(.assigned-sme)", peoplePickerFunc);
-$(document).on("click", "div.assigned-sme:has(i.fa-user)", peoplePickerFunc);
+$(document).on("click", "span.assigned-sme:has(i.fa-user)", peoplePickerFunc);
 
 function showSaveMsg(msg) { $("#saveMsg").html(msg); $("#saveAlert").show(); }
 function hideSaveMsg() { $("#saveAlert").hide(); }
 function showValidationErrorsMsg() { $("#validationErrorsAlert").show(); }
 function hideValidationErrorsMsg() { $("#validationErrorsAlert").hide(); }
+function showNoNameErrorsMsg() { $("#noNameErrorAlert").show(); }
+function hideNoNameErrorsMsg() { $("#noNameErrorAlert").hide(); }
 
 // Show the status alert at the top of the page based on type and message passed in.
 //
@@ -377,20 +379,20 @@ $('#ProcessAreaId').on('change',
 function disablePmoReviewControls() {
    // Disable the controls for PMO review if the current
    // user is not part of the IT PMO group.
-   let $isPmo = $("#IsPmo").val();
-   let $isBusinessConsulting = $("#IsBusinessConsulting").val();
+   const isPmo = document.getElementById('IsPmo').value;
+   const isBusinessConsulting = document.getElementById('IsBusinessConsulting').value;
 
-   if ($isPmo === "False") {
+   if (isPmo === "False") {
       $(".pmo-only").attr("disabled", "disabled");
    }
 
    // Disable the controls for Categorization on the PMO Review
    // tab if not part of PMO or Global Business Consulting groups.
-   if ($isPmo === "False" && $isBusinessConsulting === "False") {
+   if (isPmo === "False" && isBusinessConsulting === "False") {
       $(".gbc-only").attr("disabled", "disabled");
       // Disable Assigned SME people picker.
-      $(document).off("click", "div.assigned-sme:has(i.fa-user)", peoplePickerFunc);
-      $("body").off("click", "div.assigned-sme:has(i.fa-times)", clearPeoplePicker);
+      $(document).off("click", "span.assigned-sme:has(i.fa-user)", peoplePickerFunc);
+      $(document).off("click", "div.assigned-sme:has(i.fa-times)", clearPeoplePicker);
    }
 }
 
@@ -556,9 +558,10 @@ $("#btnSaveSubmit").click(function () {
    if (isValid) {
       $("#SubmittedForReview").val(true); // mark the hidden form field that tracks if submitted as true
       demandSubmit(true);
+   } else {
+      hideSaveMsg();
+      showValidationErrorsMsg();
    }
-   hideSaveMsg();
-   showValidationErrorsMsg();
 });
 
 // Save the data on the form but keep the form open.
@@ -567,10 +570,11 @@ $("#btnSave").click(function () {
 
    if (isValid) {
       demandSubmit(false);
+   } else {
+      hideSaveMsg();
+      showValidationErrorsMsg();
    }
 
-   hideSaveMsg();
-   showValidationErrorsMsg();
    return false;
 });
 
@@ -580,10 +584,11 @@ $('#demandRequestForm').submit(function () {
 
    if (isValid) {
       demandSubmit(true);
+   } else {
+      hideSaveMsg();
+      showValidationErrorsMsg();
    }
 
-   hideSaveMsg();
-   showValidationErrorsMsg();
    return false;
 });
 
@@ -591,9 +596,16 @@ function demandSubmit(willRedirect) {
    hideSaveMsg();
    hideValidationErrorsMsg();
 
+   if (!document.getElementById('Name').value) {
+      showNoNameErrorsMsg();
+      return;
+   } else {
+      hideNoNameErrorsMsg();
+   }
+
    App.Dialogs.busyBox.show("Saving, please wait...");
 
-   // re-enable disabled controls from submit - do before getting form data!
+   // re-enable disabled controls for submit - do before getting form data!
    $(".pmo-only").removeAttr("disabled");
    $(".gbc-only").removeAttr("disabled");
 
@@ -652,6 +664,7 @@ $(document).ready(function () {
    toggleAttachmentMsg();
    hideSaveMsg();
    hideValidationErrorsMsg();
+   hideNoNameErrorsMsg();
    disablePmoReviewControls();
 
    // For changes I made to js files to work with Bootstrap 5: https://github.com/davidstutz/bootstrap-multiselect/issues/1230
@@ -661,7 +674,7 @@ $(document).ready(function () {
    const demandId = document.getElementById("Id").value;
    const submitForPmoReview = document.getElementById("SubmittedForReview").value;
    const cancelledOn = document.getElementById("CancelledOn").value;
-   const executionType = $("input[name='ExecutionType']:checked").val();
+   const pmoReviewExecutionType = $("input[name='PmoReviewExecutionType']:checked").val();
 
    // If this demand has been cancelled, disable all form inputs and controls.
    // Leave the Delete button available to Admins & PMO only.
@@ -684,14 +697,14 @@ $(document).ready(function () {
    if (demandId < 1) {
       $("#demandIdDisplay").hide();
    }
-   
+
    if (submitForPmoReview === 'False' && demandId > 0 && !cancelledOn) {
       showStatusAlert(
          '<i class="fa fa-exclamation-circle" aria-hidden="true"></i> This Demand Request has been saved but not yet submitted for review by the Corporate IT Project Management Office.',
          'warning');
    }
 
-   if (submitForPmoReview === 'True' && !executionType) {
+   if (submitForPmoReview === 'True' && !pmoReviewExecutionType) {
       showStatusAlert(
          '<i class="fa fa-info-circle" aria-hidden="true"></i> This Demand Request is currently awaiting review by the Corporate IT Project Management Office.',
          'info');

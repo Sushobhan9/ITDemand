@@ -61,7 +61,8 @@ function loadInformation() {
       "Loading information page, Please wait...",
       function () {
          $.getScript("/js/demand-attachment.js");
-         $.getScript("/js/demand-form.js");        
+         $.getScript("/js/demand-form.js"); 
+         $.getScript("/js/plug-ins/jquery.dirtyforms.min.js");
          // If the Attachments link was clicked to get here, go directly
          // to it.
          if (getParameterByName("showAttachmentTab") === 'true')

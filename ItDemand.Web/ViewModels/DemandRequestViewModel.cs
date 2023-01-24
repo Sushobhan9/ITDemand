@@ -56,20 +56,20 @@ namespace ItDemand.Web.ViewModels
 		public UserViewModel? SubmittedBy { get; set; }
 
 		public DemandState DemandState { get; set; } = DemandState.InitialEntry;
+        public int? ExecutionType { get; set; }
 
-		#region PMO Review
-		public bool RequestCorrections { get; set; }
+        #region PMO Review
+        public bool RequestCorrections { get; set; }
 		public string RequestCorrectionsComments { get; set; } = string.Empty;
 		public DateTimeOffset? RequestCorrectionsDate { get; set; }
 		public int? RequestCorrectionsById { get; set; }
-		//public virtual UserViewModel? RequestCorrectionsBy { get; set; }
-        public virtual string RequestCorrectionsByDisplayName { get; set; } = string.Empty;
-
-        public int? ExecutionType { get; set; }
+		public virtual string RequestCorrectionsByDisplayName { get; set; } = string.Empty;
+      
         public DateTimeOffset? PmoReviewedOnDate { get; set; }
 		public string PmoReviewComments { get; set; } = string.Empty;
+        public WorkflowType? PmoReviewExecutionType { get; set; }
 
-		public string NewApplication { get; set; } = string.Empty; // Yes/No select
+        public string NewApplication { get; set; } = string.Empty; // Yes/No select
         public int? ProposedPlatformId { get; set; }
 		public string DecommissionRequired { get; set; } = string.Empty; // Yes/No select
         public UserViewModel? AssignedSme { get; set; }
@@ -172,10 +172,10 @@ namespace ItDemand.Web.ViewModels
 			new SelectListItem {Value = "Waterfall", Text = "Waterfall"}
 		};
 
-        public IEnumerable<Tuple<int, string>> PmoReviewOptions => new List<Tuple<int, string>>
+        public IEnumerable<Tuple<WorkflowType, string>> PmoReviewOptions => new List<Tuple<WorkflowType, string>>
         {
-            new Tuple<int, string>((int)WorkflowType.ProceedLocallyL1, "Proceed Locally (L1)"),
-            new Tuple<int, string>((int)WorkflowType.ItDemandReview, "Proceed to Demand Review Gate 1")
+            new Tuple<WorkflowType, string>(WorkflowType.ProceedLocallyL1, "Proceed Locally (L1)"),
+            new Tuple<WorkflowType, string>(WorkflowType.ItDemandReview, "Proceed to Demand Review Gate 1")
         };
 
         public IEnumerable<SelectListItem> ProjectPhases => new List<SelectListItem>
@@ -210,6 +210,11 @@ namespace ItDemand.Web.ViewModels
 			new SelectListItem {Value = "No", Text = "No"},
 			new SelectListItem {Value = "Unknown", Text = "Unknown"}
 		};
+		#endregion
+
+		#region Permission Flags
+		public bool IsPmo { get; set; }
+        public bool IsBusinessConsulting { get; set; }
 		#endregion
 	}
 }

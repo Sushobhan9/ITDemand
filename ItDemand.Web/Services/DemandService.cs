@@ -106,7 +106,7 @@ namespace ItDemand.Web.Services
             // Set flag if someone from PMO has reviewed the request and
             // assigned an Execution workflow for the project.
             // We create the workflow items after the main form data has been successfully saved.
-            var createWorkflow = request.ExecutionType.HasValue && !entity.ExecutionType.HasValue;
+            var createWorkflow = request.PmoReviewExecutionType.HasValue && !entity.PmoReviewExecutionType.HasValue;
 
             _mapper.Map(request, entity);
 
@@ -144,13 +144,13 @@ namespace ItDemand.Web.Services
                 // PMO has reviewed and determined if this request requires a
                 // Gate 1 Review or can Proceed Locally (L1).
                 // Create the necessary checklists.
-                entity.ExecutionType = (WorkflowType?)request.ExecutionType;
+                entity.ExecutionType = request.PmoReviewExecutionType;
                 entity.PmoReviewById = _user.Id;
                 entity.PmoReviewedOnDate = DateTimeOffset.Now;
                 var factory = new ProjectFactory(_log, _db);
                 factory.CreateWorkItems(entity);
 
-                _log.Info($"[{entity.Name}]: PMO Review Complete. Assigned as {entity.ExecutionType.GetDescription<WorkflowType>()}");
+                _log.Info($"[{entity.Name}]: PMO Review Complete. Assigned as {(entity.ExecutionType == null ? "Unknown" : entity.ExecutionType.GetDescription<WorkflowType>())}");
 
                 // Assign proper state based on PMO Project Type selected.
                 entity.DemandState = entity.ExecutionType == WorkflowType.ProceedLocallyL1 ? DemandState.ItHeadApproval : DemandState.DemandGate1;
@@ -272,6 +272,9 @@ namespace ItDemand.Web.Services
 
             // map entity to view model
             var demandViewModel = _mapper.Map<DemandRequestViewModel>(demand);
+
+            demandViewModel.IsPmo = _user.IsPmo();
+            demandViewModel.IsBusinessConsulting = _user.IsBusinessConsulting();
 
             FillInSelectOptions(demandViewModel);
 

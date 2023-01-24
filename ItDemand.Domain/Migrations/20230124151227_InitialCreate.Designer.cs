@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ItDemand.Domain.Migrations
 {
     [DbContext(typeof(ItDemandContext))]
-    [Migration("20230118193144_InitialCreate")]
+    [Migration("20230124151227_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -777,6 +777,9 @@ namespace ItDemand.Domain.Migrations
                     b.Property<string>("PmoReviewComments")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PmoReviewExecutionType")
+                        .HasColumnType("int");
 
                     b.Property<DateTimeOffset?>("PmoReviewedOnDate")
                         .HasColumnType("datetimeoffset");

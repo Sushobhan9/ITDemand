@@ -110,6 +110,8 @@ namespace ItDemand.Domain.Models
         public DateTimeOffset? PmoReviewedOnDate { get; set; }
         public string PmoReviewComments { get; set; } = string.Empty;
 
+        public WorkflowType? PmoReviewExecutionType { get; set; } // the initial Execution Type selected by PMO during their review
+
         public string NewApplication { get; set; } = string.Empty; // Yes/No
 
         public int? ProposedPlatformId { get; set; }

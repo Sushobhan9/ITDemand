@@ -1,18 +1,16 @@
 ﻿using AutoMapper;
 using ItDemand.Domain.DataContext;
 using ItDemand.Domain.Enums;
-using ItDemand.Domain.Models;
 using ItDemand.Domain.Utils;
 using ItDemand.Web.Services;
 using ItDemand.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace ItDemand.Web.Controllers
 {
-	public class DemandController : Controller
+    public class DemandController : Controller
 	{
         private readonly ApplicationLog _log;
 		private readonly IMapper _mapper;
@@ -187,6 +185,27 @@ namespace ItDemand.Web.Controllers
                 _log.Error(ex);
                 return Json(new { success = false, message = ex.Message });
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DownloadFile(int id)
+        {
+            var file = await _db.Attachments.FindAsync(id);
+            if (file == null)
+            {
+                _log.Warn($"File Download Error: Attachment with Id={id} not found.");
+                return NotFound();
+            }
+
+            return File(file.Contents, GetContentType(file.FileName ?? ""), file.FileName);
+        }
+
+        private static string GetContentType(string filename)
+        {
+            var provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(filename, out var contentType))
+                contentType = "application/octet-stream";
+            return contentType;
         }
     }
 }

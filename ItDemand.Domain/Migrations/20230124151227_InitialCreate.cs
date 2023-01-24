@@ -378,6 +378,7 @@ namespace ItDemand.Domain.Migrations
                     PmoReviewById = table.Column<int>(type: "int", nullable: true),
                     PmoReviewedOnDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     PmoReviewComments = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PmoReviewExecutionType = table.Column<int>(type: "int", nullable: true),
                     NewApplication = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProposedPlatformId = table.Column<int>(type: "int", nullable: true),
                     DecommissionRequired = table.Column<string>(type: "nvarchar(max)", nullable: false),

@@ -776,6 +776,9 @@ namespace ItDemand.Domain.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("PmoReviewExecutionType")
+                        .HasColumnType("int");
+
                     b.Property<DateTimeOffset?>("PmoReviewedOnDate")
                         .HasColumnType("datetimeoffset");
 

@@ -32,7 +32,7 @@
                         <tr>
                             <td>
                                 <input type="hidden" name="Attachments[@rowIdx].Id" value="@file.Id">
-                                <a href="@Url.Action("DownloadFile", "Project", new {id = @file.Id})" style='display: inline-block; margin-top: 6px;'>@file.FileName</a>
+                                <a href="@Url.Action("DownloadFile", "Demand", new {id = @file.Id})" style='display: inline-block; margin-top: 6px;'>@file.FileName</a>
                             </td>
                             <td class="text-center">
                                 <span style='display: inline-block; margin-top: 6px;'>@file.Created.ToString("f")</span>

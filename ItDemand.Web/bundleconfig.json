@@ -58,6 +58,7 @@
 	{
 		"outputFileName": "wwwroot/js/project.min.js",
 		"inputFiles": [
+			"wwwroot/js/project.js",
 			"wwwroot/js/plug-ins/jquery-deparam.js"
 		],
 		"minify": {

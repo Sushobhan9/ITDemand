@@ -53,12 +53,15 @@
 <form id="demandRequestForm" enctype="multipart/form-data">
     @Html.HiddenFor(x => x.Id)
     @Html.HiddenFor(m => m.DemandState)
+    @Html.HiddenFor(m => m.ExecutionType)
     @Html.HiddenFor(x => x.SubmittedForReview)
     @Html.HiddenFor(x => x.SubmittedById)
     @Html.HiddenFor(x => x.SubmittedForReviewDate)
     @Html.HiddenFor(x => x.PmoReviewedOnDate)
     @Html.HiddenFor(x => x.RequestCorrectionsByDisplayName)
     @Html.HiddenFor(x => x.RequestCorrectionsDate)
+    @Html.HiddenFor(x => x.IsPmo)
+    @Html.HiddenFor(x => x.IsBusinessConsulting)
     @Html.HiddenFor(x => x.CreatedById)
     @Html.HiddenFor(x => x.CreatedDate)
     @Html.HiddenFor(x => x.CancelledOn)
@@ -98,6 +101,13 @@
         <div class="alert alert-warning alert-dismissible" role="alert">
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> <strong>Field Validation Errors Detected: </strong> Please correct any field validation errors before submitting.
+        </div>
+    </div>
+
+    <div id="noNameErrorAlert">
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> <strong>No Demand Name Entered: </strong> Please enter a name for this Demand Request in the Demand Name field before saving.
         </div>
     </div>
 
