@@ -75,40 +75,5 @@ namespace ItDemand.Web.Services
         public void Debug(string formatString, params object[] args) => _logger.Debug(formatString, args);
         public void Trace(string formatString, params object[] args) => _logger.Trace(formatString, args);
         public void Fatal(string formatString, params object[] args) => _logger.Fatal(formatString, args);
-
-        public async Task<int> CreateLogEntry(ApplicationLogEntry logEntry)
-        {
-            var sql =
-                @$"INSERT INTO ApplicationLog (
-                    [Text]
-                   ,[Category]
-                   ,[EntryDate]
-                   ,[Type]
-                   ,[UserAccountName]
-                   ,[UserDisplayName]
-                   ,[UserRegion]
-                   ,[UserBusinessUnit]
-                   ,[Url]
-                   ,[Browser]
-                   ,[HostAddress]) 
-                VALUES(
-                    '{logEntry.Text}'
-                   ,'{logEntry.Category}'
-                   ,'{logEntry.EntryDate}'
-                   ,'{logEntry.Type}'
-                   ,'{logEntry.UserAccountName}'
-                   ,'{logEntry.UserDisplayName}'
-                   ,'{logEntry.UserRegion}'
-                   ,'{logEntry.UserBusinessUnit}'
-                   ,'{logEntry.Url}'
-                   ,'{logEntry.Browser}'
-                   ,'{logEntry.HostAddress}')";
-
-            using var conn = new SqlConnection(_configuration.GetConnectionString("LeaAudit"));
-            SqlCommand command = new(sql, conn);
-            command.Connection.Open();
-            var result = await command.ExecuteNonQueryAsync();
-            return result;
-        }
     }
 }

@@ -150,7 +150,7 @@ namespace ItDemand.Web.Services
                 var factory = new ProjectFactory(_log, _db);
                 factory.CreateWorkItems(entity);
 
-                _log.Trace($"[{entity.Name}]: PMO Review Complete. Assigned as {entity.ExecutionType.GetDescription<WorkflowType>()}");
+                _log.Info($"[{entity.Name}]: PMO Review Complete. Assigned as {entity.ExecutionType.GetDescription<WorkflowType>()}");
 
                 // Assign proper state based on PMO Project Type selected.
                 entity.DemandState = entity.ExecutionType == WorkflowType.ProceedLocallyL1 ? DemandState.ItHeadApproval : DemandState.DemandGate1;

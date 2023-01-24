@@ -1,0 +1,37 @@
+﻿<div class="container-fluid">
+    <div class="row mt-3 mb-3">
+        <div class="col-md-12">
+            <h2 class="h4"><i class="fa-regular fa-rectangle-list"></i> Application Telemetry Log</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table id="tblTelemetry" class="table w-100" style="font-size: 12px;">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>User</th>
+                        <th>Region</th>
+                        <th>Business Unit</th>
+                        <th>Text</th>
+                        <th>Browser</th>
+                        <th>Host</th>
+                        <th>Url</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <environment include="Development">
+        <script src="~/js/telemetry-log.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/telemetry-log.min.js" asp-append-version="true"></script>
+    </environment>
+}
