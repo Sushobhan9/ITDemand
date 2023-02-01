@@ -24,7 +24,7 @@ namespace ItDemand.Web.ViewModels
         public DateTimeOffset? EndDate { get; set; }
         public string Comments { get; set; }
 
-        public string DisplayId => $"Demand-{Id}";
+        public string DisplayId => $"GPS-IT-{Id}";
         
         public DemandListItemViewModel(DemandRequest request)
         {

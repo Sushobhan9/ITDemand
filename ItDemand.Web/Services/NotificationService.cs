@@ -63,7 +63,7 @@ namespace ItDemand.Web.Services
                    <table>
                    <tbody>
                    <tr>
-				   <td><strong>Demand ID:</strong></td><td></td><td>IT-Demand-{model.DemandId}</td>
+				   <td><strong>Demand ID:</strong></td><td></td><td>GPS-IT-{model.DemandId}</td>
 			       </tr>
                    <tr>
 				   <td><strong>Demand Name:</strong></td><td></td><td><a href=""{_baseUrl}/Demand/DemandRequestForm/{model.DemandId}"">{model.DemandName}</a></td>
@@ -117,7 +117,7 @@ namespace ItDemand.Web.Services
                     <table>
                     <tbody>
                     <tr>
-				    <td><strong>Demand ID:</strong></td><td></td><td>IT-Demand-{model.DemandId}</td>
+				    <td><strong>Demand ID:</strong></td><td></td><td>GPS-IT-{model.DemandId}</td>
 			        </tr>
                     <tr>
 				    <td><strong>Demand Name:</strong></td><td></td><td><a href=""{_baseUrl}/Demand/{model.DemandId}"">{model.DemandName}</a></td>
@@ -163,7 +163,7 @@ namespace ItDemand.Web.Services
 								<td><strong>Checklist:</strong></td><td></td><td><a href=""{_baseUrl}{model.ChecklistRelativePath}"">{model.ChecklistTitle}</a></td>
 							</tr>
 							<tr>
-								<td><strong>Demand Id:</strong></td><td></td><td>Demand-{model.DemandId}</td>
+								<td><strong>Demand Id:</strong></td><td></td><td>GPS-IT-{model.DemandId}</td>
 							</tr>
 							<tr>
 								<td><strong>Demand Name:</strong></td><td></td><td>{model.DemandName}</td>
@@ -195,7 +195,7 @@ namespace ItDemand.Web.Services
 
             mailMessage.Body = body.ToString();
 
-            mailMessage.Subject = $"[IT Demand System] - {model.ChecklistTitle} Approval Request (IT Demand-{model.DemandId})";
+            mailMessage.Subject = $"[IT Demand System] - {model.ChecklistTitle} Approval Request (GPS-IT-{model.DemandId})";
 
             foreach (var approver in model.Approvers)
             {
@@ -228,7 +228,7 @@ namespace ItDemand.Web.Services
 								<td><strong>Checklist:</strong></td><td></td><td><a href=""{_baseUrl}{model.ChecklistRelativePath}"">{model.ChecklistTitle}</a></td>
 							</tr>
 							<tr>
-								<td><strong>Demand Id:</strong></td><td></td><td>Demand-{model.DemandId}</td>
+								<td><strong>Demand Id:</strong></td><td></td><td>GPS-IT-{model.DemandId}</td>
 							</tr>
 							<tr>
 								<td><strong>Demand Name:</strong></td><td></td><td>{model.DemandName}</td>
@@ -245,7 +245,7 @@ namespace ItDemand.Web.Services
 
             mailMessage.Body = body.ToString();
 
-            mailMessage.Subject = $"[IT Demand System] - {model.ChecklistTitle} Corrections Requested (IT Demand-{model.DemandId})";
+            mailMessage.Subject = $"[IT Demand System] - {model.ChecklistTitle} Corrections Requested (GPS-IT-{model.DemandId})";
 
             if (!string.IsNullOrEmpty(model.SentBy.Email))
             {
@@ -278,7 +278,7 @@ namespace ItDemand.Web.Services
 								<td><strong>Checklist:</strong></td><td></td><td><a href=""{_baseUrl}{model.ChecklistRelativePath}"">{model.ChecklistTitle}</a></td>
 							</tr>
 							<tr>
-								<td><strong>Demand Id:</strong></td><td></td><td>Demand-{model.DemandId}</td>
+								<td><strong>Demand Id:</strong></td><td></td><td>GPS-IT-{model.DemandId}</td>
 							</tr>
 							<tr>
 								<td><strong>Demand Name:</strong></td><td></td><td>{model.DemandName}</td>
@@ -295,7 +295,7 @@ namespace ItDemand.Web.Services
 
             mailMessage.Body = body.ToString();
 
-            mailMessage.Subject = $"[IT Demand System] - {model.ChecklistTitle} Approved (IT Demand-{model.DemandId})";
+            mailMessage.Subject = $"[IT Demand System] - {model.ChecklistTitle} Approved (GPS-IT-{model.DemandId})";
 
             if (!string.IsNullOrEmpty(model.SentBy.Email))
             {
