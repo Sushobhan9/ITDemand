@@ -58,16 +58,16 @@ namespace ItDemand.Web.ViewModels
 				.ForMember(d => d.Text, opt => opt.MapFrom(x => x.Name));
 
 			CreateMap<User, UserViewModel>().ReverseMap();
-			
 
-			CreateMap<DemandRequest, DemandRequestViewModel>()
-				.ForMember(x => x.AffectedBusinessUnits, d => d.MapFrom(m => m.AffectedBusinessUnits.Select(x => x.BusinessUnitId)))
+
+            CreateMap<DemandRequest, DemandRequestViewModel>()
+                .ForMember(x => x.AffectedBusinessUnits, d => d.MapFrom(m => m.AffectedBusinessUnits.Select(x => x.BusinessUnitId)))
                 .ForMember(x => x.ComplianceRelevant, d => d.MapFrom(m => m.ComplianceRelevant.Select(x => x.ComplianceItemId)))
                 .ForMember(x => x.RequestCorrectionsByDisplayName, m => m.MapFrom(x => x.RequestCorrectionsBy == null ? string.Empty : x.RequestCorrectionsBy.DisplayName))
                 .ForMember(x => x.CancelledByDisplayName, m => m.MapFrom(x => x.CancelledBy == null ? string.Empty : x.CancelledBy.DisplayName))
                 .ReverseMap()
-				.ForMember(x => x.AffectedBusinessUnits, opt => opt.Ignore())
-				.ForMember(x => x.ComplianceRelevant, opt => opt.Ignore())
+                .ForMember(x => x.AffectedBusinessUnits, opt => opt.Ignore())
+                .ForMember(x => x.ComplianceRelevant, opt => opt.Ignore())
                 .ForMember(x => x.RequestOwnerId, opt => opt.Ignore())
                 .ForMember(x => x.RequestOwner, opt => opt.Ignore())
                 .ForMember(x => x.RequestSponsorId, opt => opt.Ignore())
@@ -82,7 +82,7 @@ namespace ItDemand.Web.ViewModels
                 .ForMember(x => x.Attachments, opt => opt.Ignore())
                 .ForMember(x => x.CancelledById, opt => opt.Ignore())
                 .ForMember(x => x.CancelledBy, opt => opt.Ignore())
-                .ForMember(x => x.RequestCorrectionsById, opt => opt.Ignore())
+                //.ForMember(x => x.RequestCorrectionsById, opt => opt.Ignore())
                 .ForMember(x => x.RequestCorrectionsBy, opt => opt.Ignore());
 
             CreateMap<WorkflowItem, WorkflowItemViewModel>();

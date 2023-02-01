@@ -120,7 +120,7 @@ namespace ItDemand.Web.Services
 				    <td><strong>Demand ID:</strong></td><td></td><td>GPS-IT-{model.DemandId}</td>
 			        </tr>
                     <tr>
-				    <td><strong>Demand Name:</strong></td><td></td><td><a href=""{_baseUrl}/Demand/{model.DemandId}"">{model.DemandName}</a></td>
+				    <td><strong>Demand Name:</strong></td><td></td><td><a href=""{_baseUrl}/Demand/DemandRequestForm/{model.DemandId}"">{model.DemandName}</a></td>
 			        </tr>
                     </tbody>
 	                </table>
