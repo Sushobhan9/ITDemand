@@ -115,9 +115,7 @@ $("form").submit(function (e) {
       .done(function (data, textStatus, jqXHR) {
          if (data.success === true) {
             App.Dialogs.busyBox.hide();
-            App.Dialogs.messageBox("The checklist was saved successfully.", function () {
-               document.location = '/Project/Index/' + data.demandId;
-            });
+            document.location = '/Project/Index/' + data.demandId;
          }
          else {
             $('#feedbackMsg').html('<div class="alert alert-danger alert-sm" role="alert"><i class="fa fa-circle-exclaimation"></i> An error occurred while saving the checklist.</div>');
