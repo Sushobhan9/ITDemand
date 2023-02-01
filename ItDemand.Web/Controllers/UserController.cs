@@ -1,21 +1,26 @@
 ﻿using AutoMapper;
 using ItDemand.Domain.DataContext;
+using ItDemand.Domain.Enums;
+using ItDemand.Domain.Models;
 using ItDemand.Web.Services;
 using ItDemand.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 
 namespace ItDemand.Web.Controllers
 {
 	public class UserController : Controller
 	{
-		private readonly ItDemandContext _db;
+        private readonly ApplicationLog _log;
+        private readonly ItDemandContext _db;
 		private readonly IMapper _mapper;
 
-		public UserController(ItDemandContext dbContext, IMapper mapper)
+		public UserController(ApplicationLog log, ItDemandContext dbContext, IMapper mapper)
 		{
 			_db = dbContext;
 			_mapper = mapper;
-		}
+            _log = log;
+        }
 
 		public IActionResult Index()
 		{
@@ -34,7 +39,7 @@ namespace ItDemand.Web.Controllers
 				throw new InvalidOperationException("Unable to determine current user identity. User Principle.Name is empty.");
 
             var userService = new UserService(_db, _mapper);
-			var userModel = userService.GetEmployeeByUserName(userIdentity.Name);
+			var userModel = userService.GetUserByUserName(userIdentity.Name);
 
 			if (userModel != null)
 			{
@@ -53,32 +58,84 @@ namespace ItDemand.Web.Controllers
             return Ok(userViewModel);
         }
 
-		//[HttpGet, Route("Search")]
 		public IActionResult Search(string query, string attribute)
 		{
 			var results = ActiveDirectoryService.FindUsers(query, attribute);
 			return Ok(results);
 		}
 
-        //public ActionResult UserNameDisplay(string badge)
-        //{
-        //    string userName = string.Empty;
-        //    if (badge != null)
-        //    {
-        //        int oncid;
-        //        if (Int32.TryParse(badge.Substring(2), out oncid))
-        //        {
-        //            Core.Employee employee = Data.Oracle.GetEmployee(oncid.ToString());
-        //            if (employee != null)
-        //            {
-        //                userName = employee.FirstName + ' ' + employee.Name;
-        //            }
-        //        }
-        //        else
-        //            userName = "invalid badge";
-        //    }
-        //    ViewBag.UserName = userName;
-        //    return PartialView("_Login");
-        //}
+        [HttpPost]
+        public async Task<JsonResult> Users()
+        {
+            // https://codewithmukesh.com/blog/jquery-datatable-in-aspnet-core/
+            try
+            {
+                var draw = Request.Form["draw"].FirstOrDefault();
+                var start = Request.Form["start"].FirstOrDefault();
+                var length = Request.Form["length"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][data]"].FirstOrDefault() ?? "entryDate";
+                var sortDirection = Request.Form["order[0][dir]"].FirstOrDefault() ?? "desc";
+                var searchValue = Request.Form["search[value]"].FirstOrDefault() ?? string.Empty;
+
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+
+                var userService = new UserService(_db, _mapper);
+                var records = await userService.GetPagedUsers(skip, pageSize, sortColumn, sortDirection, searchValue);
+                int recordsTotal = userService.GetUserCount();
+                var jsonData = new { draw, recordsFiltered = recordsTotal, recordsTotal, data = records };
+
+                return Json(jsonData);
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex);
+                return Json(new { success = false });
+            }
+        }
+
+        public IActionResult EditUser(int id)
+        {
+            var userService = new UserService(_db, _mapper);
+            var user = userService.GetUserById(id);
+            var vm = _mapper.Map<UserViewModel>(user);
+            return View(vm);
+        }
+
+        [HttpPost]
+        public JsonResult SaveUser(UserViewModel vm)
+        {
+            //Change the submit to fetch api and return Json result
+            
+            try
+            {
+                // Preprocess the checkboxes for Security Role Type.
+                // Need to convert from the array sent to a single value enum flag.
+                Request.Form.TryGetValue("SecurityRole", out StringValues securityRoles);
+                vm.SecurityRole = (SecurityRole)Enum.Parse(typeof(SecurityRole), securityRoles);
+
+                var userService = new UserService(_db, _mapper);
+
+                User? user;
+                if (vm.Id > 0)
+                {
+                    user = userService.Update(vm);
+                }
+                else
+                {
+                    user = userService.Add(vm);
+                }
+
+                _db.SaveChanges();
+                vm = _mapper.Map<UserViewModel>(user);
+
+                return Json(new { success = true, vm.Id });
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex);
+                return Json(new { success = false });
+            }            
+        }
     }
 }

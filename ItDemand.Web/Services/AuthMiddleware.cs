@@ -36,7 +36,7 @@ namespace ItDemand.Web.Services
 			{
                 var claims = new List<Claim>();
                 var userService = new UserService(db, mapper);
-                var user = userService.GetEmployeeByUserName(identity.Name);
+                var user = userService.GetUserByUserName(identity.Name);
 
                 if (user == null)
 				{

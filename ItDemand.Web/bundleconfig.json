@@ -75,5 +75,15 @@
 			"enabled": true,
 			"renameLocals": true
 		}
+	},
+	{
+		"outputFileName": "wwwroot/js/manage-users.min.js",
+		"inputFiles": [
+			"wwwroot/js/manage-users.js"
+		],
+		"minify": {
+			"enabled": true,
+			"renameLocals": true
+		}
 	}
 ]

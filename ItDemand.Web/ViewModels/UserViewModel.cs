@@ -17,6 +17,7 @@ namespace ItDemand.Web.ViewModels
         public bool IsAdmin() => SecurityRole.HasFlag(SecurityRole.Admin);
         public bool IsPmo() => SecurityRole.HasFlag(SecurityRole.Pmo) || IsAdmin();
         public bool IsBusinessConsulting() => SecurityRole.HasFlag(SecurityRole.Consulting) || IsAdmin();
+		public string SecurityRoleNames => SecurityRole.ToString();
 
     }
 }

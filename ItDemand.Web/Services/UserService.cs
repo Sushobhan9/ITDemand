@@ -1,8 +1,12 @@
 ﻿using AutoMapper;
+using Dapper;
 using ItDemand.Domain.DataContext;
 using ItDemand.Domain.Models;
 using ItDemand.Web.Models;
 using ItDemand.Web.ViewModels;
+using Microsoft.EntityFrameworkCore;
+using System.Data.SqlClient;
+using static Dapper.SqlMapper;
 
 namespace ItDemand.Web.Services
 {
@@ -20,19 +24,35 @@ namespace ItDemand.Web.Services
 		public User Add(User user)
 		{
             user.Created = DateTimeOffset.Now;
+            user.IsActive = true;
             _db.Users.Add(user);
-			//_db.SaveChanges();
 			return user;
 		}
 
-        public User? GetEmployeeByUserName(string userName)
+        public User Add(UserViewModel user)
+        {
+            var entity = new User();
+            _mapper.Map(user, entity);
+            Add(entity);
+            return entity;
+        }
+
+        public User Update(UserViewModel user)
+        {
+            var entity = GetUserById(user.Id);
+            _mapper.Map(user, entity);
+            entity.LastModified = DateTimeOffset.Now;
+            return entity;
+        }
+
+        public User? GetUserByUserName(string userName)
 		{
 			var user = _db.Users
 				.SingleOrDefault(x => x.UserName.ToLower() == userName.ToLower());
 			return user;
 		}
 
-        public User? GetEmployeeById(int id)
+        public User? GetUserById(int id)
         {
             var user = _db.Users
                 .SingleOrDefault(x => x.Id == id);
@@ -44,7 +64,7 @@ namespace ItDemand.Web.Services
 			if (adUser == null) return null;
 			if (string.IsNullOrEmpty(adUser.UserName)) return null;
 
-			var user = GetEmployeeByUserName(adUser.UserName);
+			var user = GetUserByUserName(adUser.UserName);
 			if (user != null) return user;
 
 			// The user does not yet exist, create a new User record
@@ -60,7 +80,7 @@ namespace ItDemand.Web.Services
             if (userViewModel == null) return null;
             if (string.IsNullOrEmpty(userViewModel.UserName)) return null;
 
-            var user = GetEmployeeByUserName(userViewModel.UserName);
+            var user = GetUserByUserName(userViewModel.UserName);
             if (user != null) return user;
 
             // The user does not yet exist, create a new User record
@@ -70,19 +90,40 @@ namespace ItDemand.Web.Services
             return user;
         }
 
-		//private User? VerifyOrCreateEmployee(string userName)
-		//{
-  //          if (string.IsNullOrEmpty(userName)) return null;
+        public int GetUserCount()
+        {
+            var sql = @"
+                select sum([rows])
+                from sys.partitions
+                where object_id=object_id('Users')
+                and index_id in (0,1)";
 
-  //          var user = GetEmployeeByUserName(userName);
-  //          if (user != null) return user;
+            using var conn = new SqlConnection(_db.Database.GetDbConnection().ConnectionString);
+            var result = conn.QueryFirstOrDefault<int>(sql);
+            return result;
+        }
 
-  //          // The user does not yet exist, create a new User record
-  //          user = new User();
-  //          _mapper.Map(userViewModel, user);
-  //          user.Created = DateTimeOffset.Now;
-  //          Add(user);
-  //          return user;
-  //      }
+        public async Task<IEnumerable<User>> GetPagedUsers(
+            int offset, int pageSize, string sortColumn, string sortDirection, string searchValue)
+        {
+            var sql = @$"
+                select Id, 
+                       DisplayName, 
+                       UserName, 
+                       Email, 
+                       SecurityRole, 
+                       IsActive, 
+                       Created, 
+                       LastModified
+                from Users
+                where DisplayName like '%{searchValue}%' or UserName like '%{searchValue}%'
+                order by {sortColumn} {sortDirection}
+                offset {offset} rows
+                fetch next {pageSize} rows only";
+
+            using var conn = new SqlConnection(_db.Database.GetDbConnection().ConnectionString);
+            var result = await conn.QueryAsync<User>(sql);
+            return result;
+        }
     }
 }

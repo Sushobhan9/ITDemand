@@ -368,7 +368,7 @@ namespace ItDemand.Web.Services
             {
                 var entity = model.Approvers.Single(x => x.Id == item.Id);
                 _mapper.Map(item, entity);
-                entity.Approver = userService.GetEmployeeById(item.ApproverId ?? 0);
+                entity.Approver = userService.GetUserById(item.ApproverId ?? 0);
             }
         }
 

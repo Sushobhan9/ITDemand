@@ -18,5 +18,6 @@ namespace ItDemand.Domain.Models
 		public static User Default = new() { Id = 0, DisplayName = "Unknown User", UserName = "", Email = ""};
 
         public bool IsAdmin => SecurityRole == SecurityRole.Admin;
+        public string SecurityRoleNames => SecurityRole.ToString();
     }
 }

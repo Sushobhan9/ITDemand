@@ -43,11 +43,12 @@ namespace ItDemand.Web.Services
             Options.PickupDirectory = @"c:\temp\itdemand";
             Options.NoReplyAddress = new MailAddress("itdemand-dev@linde.com", "IT Demand System (Dev)");
 #elif STAGING
-            _baseUrl = "http://itdemandstage.linde.grp";
+            _baseUrl = "https://itdemandstage.linde.grp";
             _isTesting = true;
+            Options.PickupDirectory = @"c:\temp\itdemandemails";
             Options.NoReplyAddress = new MailAddress("itdemand-stage@linde.com", "IT Demand System (Stage)");
 #else
-            _baseUrl = "http://itdemand.linde.grp";
+            _baseUrl = "https://itdemand.linde.grp";
             _isTesting = false;
 #endif
         }
@@ -65,7 +66,7 @@ namespace ItDemand.Web.Services
 				   <td><strong>Demand ID:</strong></td><td></td><td>IT-Demand-{model.DemandId}</td>
 			       </tr>
                    <tr>
-				   <td><strong>Demand Name:</strong></td><td></td><td><a href=""{_baseUrl}/Demand/{model.DemandId}"">{model.DemandName}</a></td>
+				   <td><strong>Demand Name:</strong></td><td></td><td><a href=""{_baseUrl}/Demand/DemandRequestForm/{model.DemandId}"">{model.DemandName}</a></td>
 			       </tr>
                    </tbody>
 	               </table>
