@@ -1,0 +1,79 @@
+﻿<div class="container-fluid">
+    <div class="row mt-3 mb-3">
+        <div class="col-md-12">
+            <h2 class="h4"><i class="fa-solid fa-clipboard-list"></i> My Portfolio</h2>
+        </div>
+    </div>
+    <hr />
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa-solid fa-list-check"></i> My Approvals
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label style="display: inline-block; width: 120px; font-weight: 600;">
+                            Checklist Status:
+                        </label>
+                        <select class="form-select form-select-sm" style="display: inline-block; width: 200px;"
+                                name="checklistStatusFilter"
+                                id="checklistStatusFilter"
+                        >
+                            <option value="2">Waiting Approval</option>
+                            <option value="3">Approved</option>
+                            <option value="4">Rejected</option>
+                            <option value="99">All</option>
+                        </select>
+                    </div>
+                    <table id="tblMyApprovals" class="table" style="font-size: 12px;">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Request Name</th>
+                                <th>Checklist</th>
+                                <th>Approval Date</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>      
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa-solid fa-diagram-project"></i> My Demand Requests
+                </div>
+                <div class="card-body">
+                    <table id="tblMyRequests" class="table w-100" style="font-size: 12px;">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Request Name</th>
+                                <th>Request Owner</th>
+                                <th>Request Sponsor</th>
+                                <th>Project Manager</th>
+                                <th>Execution Type</th>
+                                <th>Demand State</th>
+                                <th>Created</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <environment include="Development">
+        <script src="~/js/my-portfolio.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/my-portfolio.min.js" asp-append-version="true"></script>
+    </environment>
+}

@@ -18,7 +18,6 @@ namespace ItDemand.Web.Services
 
     public class NotificationService
     {
-        private readonly ApplicationLog _log;
         private readonly ItDemandContext _db;
 
         public MailOptions Options { get; private set; } = new MailOptions();
@@ -32,10 +31,9 @@ namespace ItDemand.Web.Services
         private const string TestWarning =
             "<p><strong>***** This email is originating from a testing site! The email is only relevant to the specific testing being done and should not be considered business related.  *****</strong></p>";
 
-        public NotificationService(ApplicationLog log, ItDemandContext dbContext)
+        public NotificationService(ItDemandContext dbContext)
         {
             _db = dbContext;
-            _log = log;
 
 #if DEBUG
             _baseUrl = "http://localhost:42472";

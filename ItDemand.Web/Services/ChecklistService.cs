@@ -7,7 +7,7 @@ using ItDemand.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
-using System.Text.RegularExpressions;
+using System.Linq.Dynamic.Core;
 
 namespace ItDemand.Web.Services
 {
@@ -102,7 +102,7 @@ namespace ItDemand.Web.Services
 
                 _mapper.Map(checklistData, model);
                 model.Status = status;
-                
+
                 ProcessApprovers(checklistData.Approvers, model);
                 ProcessQuestions(checklistData.Questions, model);
 
@@ -122,6 +122,50 @@ namespace ItDemand.Web.Services
                 transaction.Rollback();
                 throw;
             }
+        }
+
+        public PagedResults<MyApprovalsViewModel> GetApprovalsForUser(
+            int offset, int pageSize, string sortColumn, string sortDirection, string searchValue, StatusType statusFilter)
+        {
+            PagedResults<MyApprovalsViewModel> pagedResults = new();
+
+            var query = _db.Checklists
+                .Include(x => x.DemandRequest)
+                .Include(x => x.Approvers)
+                .Where(x => x.Approvers.Any(y => y.ApproverId == _user.Id))
+                .AsQueryable();
+
+            // If the status type sent along is greater than any of our existing types
+            // return all statuses (in which we don't need to filter).
+            if (statusFilter <= Enum.GetValues(typeof(StatusType)).Cast<StatusType>().Max())
+            {
+                query = query.Where(x => x.Status == statusFilter);
+            }
+
+            if (!string.IsNullOrWhiteSpace(searchValue))
+            {
+                query = query.Where(x =>
+                    x.Name.Contains(searchValue)
+                );
+            }
+
+            pagedResults.TotalCount = query.Count();
+
+            pagedResults.Rows = query
+                .OrderBy($"{sortColumn} {sortDirection}")
+                .Skip(offset)
+                .Take(pageSize)
+                .Select(x => new MyApprovalsViewModel
+                {
+                    DemandRequestId = x.DemandRequestId,
+                    RequestName = x.DemandRequest.Name,
+                    ChecklistName = x.Name,
+                    ChecklistId = x.Id,
+                    ApprovalDate = x.Approvers.FirstOrDefault(y => y.ApproverId == _user.Id).ApprovalDate,
+                })
+                .ToArray();
+
+            return pagedResults;
         }
 
         private Checklist? GetChecklistModel(int id)
@@ -395,7 +439,7 @@ namespace ItDemand.Web.Services
         {
             if (checklist.Status == StatusType.New || checklist.Status == StatusType.InProgress) return;
 
-            var notifyService = new NotificationService(_log, _db);
+            var notifyService = new NotificationService(_db);
 
             var notificationModel = new ChecklistApprovalNotificationModel
             {

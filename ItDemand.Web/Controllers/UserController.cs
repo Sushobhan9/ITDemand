@@ -137,5 +137,69 @@ namespace ItDemand.Web.Controllers
                 return Json(new { success = false });
             }            
         }
+
+        [HttpGet]
+        public IActionResult MyPortfolio()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult MyApprovals()
+        {
+            try
+            {
+                var statusFilter = Request.Form["statusFilter"].FirstOrDefault();
+                var draw = Request.Form["draw"].FirstOrDefault();
+                var start = Request.Form["start"].FirstOrDefault();
+                var length = Request.Form["length"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][data]"].FirstOrDefault() ?? "entryDate";
+                var sortDirection = Request.Form["order[0][dir]"].FirstOrDefault() ?? "desc";
+                var searchValue = Request.Form["search[value]"].FirstOrDefault() ?? string.Empty;
+
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+                int checklistStatus = statusFilter != null ? Convert.ToInt32(statusFilter) : 99;
+
+                var checklistService = new ChecklistService(_log, _db, _mapper, this.GetUser());
+                var pagedRows = checklistService.GetApprovalsForUser(skip, pageSize, sortColumn, sortDirection, searchValue, (StatusType)checklistStatus);
+                var jsonData = new { draw, recordsFiltered = pagedRows.TotalCount, recordsTotal = pagedRows.TotalCount, data = pagedRows.Rows };
+
+                return Json(jsonData);
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex);
+                return Json(new { success = false });
+            }
+        }
+
+        [HttpPost]
+        public JsonResult MyDemandRequests()
+        {
+            try
+            {
+                var draw = Request.Form["draw"].FirstOrDefault();
+                var start = Request.Form["start"].FirstOrDefault();
+                var length = Request.Form["length"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][data]"].FirstOrDefault() ?? "entryDate";
+                var sortDirection = Request.Form["order[0][dir]"].FirstOrDefault() ?? "desc";
+                var searchValue = Request.Form["search[value]"].FirstOrDefault() ?? string.Empty;
+
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+
+                var demandService = new DemandService(_log, _db, _mapper, this.GetUser());
+                var pagedRows = demandService.GetDemandsForUser(skip, pageSize, sortColumn, sortDirection, searchValue);
+                var jsonData = new { draw, recordsFiltered = pagedRows.TotalCount, recordsTotal = pagedRows.TotalCount, data = pagedRows.Rows };
+
+                return Json(jsonData);
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex);
+                return Json(new { success = false });
+            }
+        }
     }
 }

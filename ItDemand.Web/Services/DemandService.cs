@@ -2,12 +2,12 @@
 using ItDemand.Domain.DataContext;
 using ItDemand.Domain.Enums;
 using ItDemand.Domain.Models;
-using ItDemand.Domain.Repositories;
 using ItDemand.Domain.Utils;
 using ItDemand.Web.Models;
 using ItDemand.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 
 namespace ItDemand.Web.Services
 {
@@ -230,7 +230,51 @@ namespace ItDemand.Web.Services
             return _mapper.Map<UserViewModel>(bu?.ItHead ?? User.Default);
         }
 
-		private DemandRequestViewModel GetNewDemandRequest()
+        public PagedResults<MyDemandsViewModel> GetDemandsForUser(
+            int offset, int pageSize, string sortColumn, string sortDirection, string searchValue)
+        {
+            PagedResults<MyDemandsViewModel> pagedResults = new();
+
+            var query = _db.DemandRequests
+                .Include(x => x.RequestOwner)
+                .Include(x => x.RequestSponsor)
+                .Include(x => x.ProjectManager)
+                .Where(x => x.RequestOwnerId == _user.Id ||
+                            x.RequestSponsorId == _user.Id ||
+                            x.ProjectManagerId == _user.Id)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchValue))
+            {
+                query = query.Where(x =>
+                    x.Name.Contains(searchValue) || x.RequestOwner.DisplayName.Contains(searchValue) || 
+                    x.RequestSponsor.DisplayName.Contains(searchValue) || x.ProjectManager.DisplayName.Contains(searchValue)
+                );
+            }
+
+            pagedResults.TotalCount = query.Count();
+
+            pagedResults.Rows = query
+                .OrderBy($"{sortColumn} {sortDirection}")
+                .Skip(offset)
+                .Take(pageSize)
+                .Select(x => new MyDemandsViewModel
+                {
+                    Id = x.Id,
+                    RequestName = x.Name,
+                    RequestOwner = x.RequestOwner == null ? string.Empty : x.RequestOwner.DisplayName,
+                    RequestSponsor = x.RequestSponsor == null ? string.Empty : x.RequestSponsor.DisplayName,
+                    ProjectManager = x.ProjectManager == null ? string.Empty : x.ProjectManager.DisplayName,
+                    ExecutionType = x.ExecutionType == null ? string.Empty : x.ExecutionType.GetDescription<WorkflowType>(),
+                    DemandState = x.DemandState.GetDescription<DemandState>(),
+                    CreatedDate = x.CreatedDate
+                })
+                .ToArray();
+
+            return pagedResults;
+        }
+
+        private DemandRequestViewModel GetNewDemandRequest()
 		{
 			var demandViewModel = new DemandRequestViewModel();		
 			FillInSelectOptions(demandViewModel);
@@ -598,7 +642,7 @@ namespace ItDemand.Web.Services
 
         private void NotifySubmittedToPmo(DemandRequest entity)
         {
-            var notifyService = new NotificationService(_log, _db);
+            var notifyService = new NotificationService(_db);
 
             var pmoNotifyModel = new NotifySubmitForReviewModel
             {
@@ -612,7 +656,7 @@ namespace ItDemand.Web.Services
 
         private void NotifyCorrectionRequest(DemandRequest entity)
         {
-            var notifyService = new NotificationService(_log, _db);
+            var notifyService = new NotificationService(_db);
 
             _db.Entry(entity).Reference(x => x.RequestCorrectionsBy).Load();
 

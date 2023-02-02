@@ -85,5 +85,15 @@
 			"enabled": true,
 			"renameLocals": true
 		}
+	},
+	{
+		"outputFileName": "wwwroot/js/my-portfolio.min.js",
+		"inputFiles": [
+			"wwwroot/js/my-portfolio.js"
+		],
+		"minify": {
+			"enabled": true,
+			"renameLocals": true
+		}
 	}
 ]
